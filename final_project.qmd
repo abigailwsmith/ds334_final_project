@@ -1,0 +1,21 @@
+---
+title: "Final Project"
+format: html
+---
+
+# Abstract/Brainstorm
+
+I am thinking to do a project on the "Sticky Stuff" scandal in Major League Baseball in 2021. I am thinking to use Statcast for the source of the data on pitch speed and spin rate as well as the batting statistics. The initial dataset that I read in is from MLB's Statcast Feature, it is accessible on the Baseball Savant website (https://baseballsavant.mlb.com/leaderboard/custom?year=2024%2C2023%2C2022%2C2021%2C2020%2C2019%2C2018&type=pitcher&filter=&min=q&selections=pa%2Chome_run%2Ck_percent%2Cbb_percent%2Cxba%2Cxslg%2Csl_avg_speed%2Csl_avg_spin%2Cch_avg_speed%2Cch_avg_spin%2Ccu_avg_speed%2Ccu_avg_spin%2Csi_avg_speed%2Csi_avg_spin&chart=false&x=pa&y=pa&r=no&chartType=beeswarm&sort=pa&sortDir=desc). I adjusted the dataframe to include pitching statistics for individual pitchers in the years 2018-2024 for the whole MLB. I included the following general variables variables: pa (players against), home_run (home runs against), k_percent (strikeout percentage), bb_percent(walk percentage), xba(opposing batting average), xslg(opposing slugging average). And the following variables specific to individual pitches: sl_avg_speed (slider average speed), sl_avg_spin (slider average spin rate), ch_avg_speed (changeup average speed),ch_avg_spin (changeup average spin rate), cu_avg_speed (curveball average soeed), cu_avg_spin (curveball average spin rate), si_avg_speed (sinker average speed), si_avg_spin (sinker average spin rate). 
+
+Additionally, I used basbeall-reference for data on babseall attendance (https://www.baseball-reference.com/leagues/majors/2024-misc.shtml)
+
+
+# Data
+
+```{r}
+library(here)
+library(readr)
+library(tidyverse)
+pitching_df <- read_csv(here("data/pitching_stats.csv"))
+```
+
