@@ -194,8 +194,94 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>Additionally, I used <a href="https://www.baseball-reference.com/leagues/majors/2024-misc.shtml">basbeall-reference</a> for data on baseball attendance, in the years 2018-2024. For this data, it was all in individual data sets which I had to join together into one big one.</p>
-<p>As a tentative tv viewership dataset I found this one on <a href="https://www.kaggle.com/datasets/mattop/world-series-baseball-television-ratings?resource=download">kaggle</a> that covers just world series game viewership between 2022 and 2024. I am trying to find a better dataset that is general tv viewership and includes 2023.</p>
+</section>
+<section id="attendance-datasets-descriptions" class="level1">
+<h1>Attendance datasets descriptions</h1>
+<p>Additionally, I used <a href="https://www.baseball-reference.com/leagues/majors/2024-misc.shtml">basbeall-reference</a> for data on baseball attendance, in the years 2018-2024. For this data, it was all in individual data sets which I had to join together into one big one. In each dataset the variables are the same which I created a table for.</p>
+<table class="table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 73%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Tm</code></td>
+<td>The team’s name.</td>
+</tr>
+<tr class="even">
+<td><code>Attendance</code></td>
+<td>Total attendance for home games that season.</td>
+</tr>
+<tr class="odd">
+<td><code>Attendance/G</code></td>
+<td>Average attendance per home game that season.</td>
+</tr>
+<tr class="even">
+<td><code>BatAge</code></td>
+<td>Batter’s average age in that season.</td>
+</tr>
+<tr class="odd">
+<td><code>PAge</code></td>
+<td>Pitcher’s average age in that season.</td>
+</tr>
+<tr class="even">
+<td><code>BPF</code></td>
+<td>Batting park factor, a scale used to measure if a ballpark favors batters (&gt;100) or pitchers (&lt;100).</td>
+</tr>
+<tr class="odd">
+<td><code>PPF</code></td>
+<td>Pitching park factor, a scale used to measure if a ballpark favors batters (&gt;100) or pitchers (&lt;100).</td>
+</tr>
+<tr class="even">
+<td><code>#HOF</code></td>
+<td>The number of players currently in hall of fame on that team in that season.</td>
+</tr>
+<tr class="odd">
+<td><code>#A-S</code></td>
+<td>The number of allstars on that team in that season.</td>
+</tr>
+<tr class="even">
+<td><code>#a-tA-S</code></td>
+<td>The number of allstars on that team at any point in their career.</td>
+</tr>
+<tr class="odd">
+<td><code>Est. Payroll</code></td>
+<td>The estimated payroll of the team.</td>
+</tr>
+<tr class="even">
+<td><code>Time</code></td>
+<td>The average game time in that season.</td>
+</tr>
+<tr class="odd">
+<td><code>Chall</code></td>
+<td>The average number of challenges per game in that season.</td>
+</tr>
+<tr class="even">
+<td><code>Succ</code></td>
+<td>The average number of successful challenges per game in that season.</td>
+</tr>
+<tr class="odd">
+<td><code>Succ%</code></td>
+<td>The percentage of successful challenges per game in that season..</td>
+</tr>
+<tr class="even">
+<td><code>Managers</code></td>
+<td>The name of the team’s manager that season.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tv-viewership-dataset-description" class="level1">
+<h1>TV Viewership dataset description</h1>
+<ul>
+<li>I didnt make a table of this data because I am not sure about it * As a tentative tv viewership dataset I found this one on <a href="https://www.kaggle.com/datasets/mattop/world-series-baseball-television-ratings?resource=download">kaggle</a> that covers just world series game viewership between 2022 and 2024. I am trying to find a better dataset that is general tv viewership and includes 2023.</li>
+</ul>
 </section>
 <section id="packages" class="level1">
 <h1>Packages</h1>

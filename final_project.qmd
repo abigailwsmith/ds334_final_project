@@ -31,8 +31,6 @@ The initial data set that I read in is from MLB's Statcast Feature, it is access
 |`cu_avg_speed`|The average speed of cutters for that pitcher in that season.|
 |`cu_avg_spin`|The average spin rate of cutters for that pitcher in that season.|
 |`si_avg_speed`|The average speed of sinkers for that pitcher in that season.|
-|`fastball_avg_spin`|The average speed of fastballs for that pitcher in that season.|
-|`fastball_avg_spin`|The average spin rate of fastballs for that pitcher in that season.|
 
 # Attendance datasets descriptions
 
@@ -58,8 +56,25 @@ Additionally, I used [basbeall-reference](https://www.baseball-reference.com/lea
 |`Managers`|The name of the team's manager that season.|
 
 # TV Viewership dataset description
-* I didnt make a table of this data because I am not sure about it *
-As a tentative tv viewership dataset I found this one on [kaggle](https://www.kaggle.com/datasets/mattop/world-series-baseball-television-ratings?resource=download) that covers just world series game viewership between 2022 and 2024. I am trying to find a better dataset that is general tv viewership and includes 2023. 
+
+As a tentative tv viewership dataset I found is this one from [kaggle](https://www.kaggle.com/datasets/mattop/world-series-baseball-television-ratings?resource=download) that covers just world series game viewership between 2022 and 2024. I am trying to find a better dataset that is general tv viewership, however it seems that most if not all avialable mlb viewership data is focused solely on the world series. However, conclusions can still be drawn from this data as the world series are the most watched games in the baseball season, and if viewership is down for those its definitely down for the entire season.
+
+| Variable | Description                                                                                                                |
+|-------------------|-----------------------------------------------------|
+|`year`    | The year of the world series.                                       |
+|`network`     |  The network the world series was broadcast on.                                         |
+|   `average_audience`   |  The average tv audience for the whole world series                                           |
+| `game_1_audience`      |The TV audience for game 1 of the world series.                                      |
+| `game_2_audience`      |The TV audience for game 2 of the world series.|
+| `game_3_audience`      |The TV audience for game 3 of the world series.                                      |
+| `game_4_audience`      |The TV audience for game 4 of the world series.                                      |
+| `game_5_audience`      |The TV audience for game 5 of the world series.                                      |
+| `game_6_audience`      |The TV audience for game 6 of the world series.                                      |
+| `game_7_audience`      |The TV audience for game 7 of the world series.                                      |
+| `total_games_played`      |The number of games played in that world series                                     |
+| `winning_team`      |The winning team of that world series.                                    |
+| `losing_team`      |The losing team of that world series.                                    |
+| `losing_team_wins`      |The number of wins for that losing team in that world series.      |
 
 # Packages
 
@@ -116,5 +131,46 @@ attendancefull <- full_join(attendance2018_2021, attendance2022_2024)
 ```{r}
 # Save the attendance data set as a CSV so that I do not lose track of it
 write_csv(attendancefull, "attendancefull.csv")
+```
+
+# Cleaning and tidying data
+
+```{r}
+pitching_df <- pitching_df |> rename(pitcher = `last_name, first_name`)
+```
+
+```{r}
+pitch_speeds_long <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "pitch_type", values_to =  "pitch_speed") |> relocate(pitch_speed, pitch_type) 
+
+pitch_spin_long <- pitching_df |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "pitch_type", values_to =  "spin_rate") |> relocate(spin_rate, pitch_type) 
+```
+
+```{r}
+# join the two new datasets
+full_pitch <- bind_rows(pitch_speeds_long, pitch_spin_long)
+```
+
+# Reproducible example
+```{r}
+example <- pitching_df |> slice(1:2) |> select(c(10:17, 1)) |> as_tibble()
+example_new <- example |> pivot_longer(1:8, names_to = "temp", values_to = "speed_spin") |>
+  separate(temp, into = c("type", "drop", "spin_type")) |>
+  select(-drop) |>
+  unite(new_val, c("type", "spin_type"))
+```
+
+```{r}
+example_new |> pivot_wider(names_from = "new_val", values_from = "speed_spin")
+```
+
+
+```{r}
+example_speeds <- example |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "pitch_type", values_to =  "pitch_speed") |> relocate(pitch_speed, pitch_type) 
+
+example_spin <- example |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "pitch_type", values_to =  "spin_rate") |> relocate(spin_rate, pitch_type)
+```
+
+```{r}
+bind_rows(example_speeds, example_spin)
 ```
 
