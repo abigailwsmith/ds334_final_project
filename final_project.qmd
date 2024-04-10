@@ -4,18 +4,117 @@ format: html
 ---
 
 # Abstract/Brainstorm
+*   still very much so a work in progress, more of a brainstorm than an abstract    *
 
-I am thinking to do a project on the "Sticky Stuff" scandal in Major League Baseball in 2021. I am thinking to use Statcast for the source of the data on pitch speed and spin rate as well as the batting statistics. The initial dataset that I read in is from MLB's Statcast Feature, it is accessible on the Baseball Savant website (https://baseballsavant.mlb.com/leaderboard/custom?year=2024%2C2023%2C2022%2C2021%2C2020%2C2019%2C2018&type=pitcher&filter=&min=q&selections=pa%2Chome_run%2Ck_percent%2Cbb_percent%2Cxba%2Cxslg%2Csl_avg_speed%2Csl_avg_spin%2Cch_avg_speed%2Cch_avg_spin%2Ccu_avg_speed%2Ccu_avg_spin%2Csi_avg_speed%2Csi_avg_spin&chart=false&x=pa&y=pa&r=no&chartType=beeswarm&sort=pa&sortDir=desc). I adjusted the dataframe to include pitching statistics for individual pitchers in the years 2018-2024 for the whole MLB. I included the following general variables variables: pa (players against), home_run (home runs against), k_percent (strikeout percentage), bb_percent(walk percentage), xba(opposing batting average), xslg(opposing slugging average). And the following variables specific to individual pitches: sl_avg_speed (slider average speed), sl_avg_spin (slider average spin rate), ch_avg_speed (changeup average speed),ch_avg_spin (changeup average spin rate), cu_avg_speed (curveball average soeed), cu_avg_spin (curveball average spin rate), si_avg_speed (sinker average speed), si_avg_spin (sinker average spin rate). 
+I am thinking to do a project on the "Sticky Stuff" scandal in Major League Baseball in 2021. The scandal involved Major League Baseball pitchers using sticky substances on their hands, to increase spin rate adn decrease pitch speed, increasing their strike outs and making it harder for the batter to hit the ball. Ultimeatley I would like to create a shiny app to look at how the sticky stuff scandal impacted the MLB financially, this could be found by looking at attendance and tv viewership. I also think it could be interesting to see how the scandal impacted batting statistics. 
 
-Additionally, I used basbeall-reference for data on babseall attendance (https://www.baseball-reference.com/leagues/majors/2024-misc.shtml)
+# Pitching dataset description
 
+The initial data set that I read in is from MLB's Statcast Feature, it is accessible on the [Baseball Savant website](https://baseballsavant.mlb.com/leaderboard/custom?year=2024%2C2023%2C2022%2C2021%2C2020%2C2019%2C2018&type=pitcher&filter=&min=q&selections=pa%2Chome_run%2Ck_percent%2Cbb_percent%2Cxba%2Cxslg%2Csl_avg_speed%2Csl_avg_spin%2Cch_avg_speed%2Cch_avg_spin%2Ccu_avg_speed%2Ccu_avg_spin%2Csi_avg_speed%2Csi_avg_spin&chart=false&x=pa&y=pa&r=no&chartType=beeswarm&sort=pa&sortDir=desc). I adjusted the data frame to include pitching statistics for individual pitchers in the years 2018-2024 for the whole MLB. The below table describes each of the variables in the data set. 
 
-# Data
+| Variable | Description                                                                                                                |
+|-------------------|-----------------------------------------------------|
+|`last_name, first_name`    | The last and first name of the player.                                            |
+|` player_id`     |   An identifying number for each player                                            |
+|   `year`   |   The year for the case.                                            |
+| `pa`      |Stands for players against, meaning its the number of batters that pitcher faced in the season.                                              |
+|`home_run`|The number of home runs allowed by the pitcher in that season.|
+|`k_percent`|The strike out percentage, the number of strike outs per batter faced by the pitcher.|
+|`bb_percent`|The walk percentage, the number of walks per batter faced by the pitcher.|
+|`p_hit_by_pitch`|The number of batters hit by the pitcher in that season.|
+|`xba`|Opposing players' batting average against the pitcher in that season.|
+|`xslg`|Opposing players' slugging average against the pitcher in that season.|
+|`sl_avg_speed`|The average speed of sliders for that pitcher in that season.|
+|`sl_avg_spin`|The average spin rate of sliders for that pitcher in that season.|
+|`ch_avg_speed`|The average speed of changeups for that pitcher in that season.|
+|`ch_avg_spin`|The average spin rate of changeups for that pitcher in that season.|
+|`cu_avg_speed`|The average speed of cutters for that pitcher in that season.|
+|`cu_avg_spin`|The average spin rate of cutters for that pitcher in that season.|
+|`si_avg_speed`|The average speed of sinkers for that pitcher in that season.|
+|`fastball_avg_spin`|The average speed of fastballs for that pitcher in that season.|
+|`fastball_avg_spin`|The average spin rate of fastballs for that pitcher in that season.|
+
+# Attendance datasets descriptions
+
+Additionally, I used [basbeall-reference](https://www.baseball-reference.com/leagues/majors/2024-misc.shtml) for data on baseball attendance, in the years 2018-2024. For this data, it was all in individual data sets which I had to join together into one big one. In each dataset the variables are the same which I created a table for. 
+
+| Variable | Description                                                                                                                |
+|-------------------|-----------------------------------------------------|
+|`Tm`    | The team's name.                                         |
+|`Attendance`     |  Total attendance for home games that season.                                          |
+|   `Attendance/G`   |  Average attendance per home game that season.                                            |
+| `BatAge`      |Batter's average age in that season.                                              |
+|`PAge`|Pitcher's average age in that season.|
+|`BPF`|Batting park factor, a scale used to measure if a ballpark favors batters (>100) or pitchers (<100).|
+|`PPF`|Pitching park factor, a scale used to measure if a ballpark favors batters (>100) or pitchers (<100).|
+|`#HOF`|The number of players currently in hall of fame on that team in that season.|
+|`#A-S`|The number of allstars on that team in that season.|
+|`#a-tA-S`|The number of allstars on that team at any point in their career.|
+|`Est. Payroll`|The estimated payroll of the team.|
+|`Time`|The average game time in that season.|
+|`Chall`|The average number of challenges per game in that season.|
+|`Succ`|The average number of successful challenges per game in that season.|
+|`Succ%`|The percentage of successful challenges per game in that season..|
+|`Managers`|The name of the team's manager that season.|
+
+# TV Viewership dataset description
+* I didnt make a table of this data because I am not sure about it *
+As a tentative tv viewership dataset I found this one on [kaggle](https://www.kaggle.com/datasets/mattop/world-series-baseball-television-ratings?resource=download) that covers just world series game viewership between 2022 and 2024. I am trying to find a better dataset that is general tv viewership and includes 2023. 
+
+# Packages
 
 ```{r}
 library(here)
 library(readr)
 library(tidyverse)
+```
+
+# Data
+
+```{r}
+# Reading in the pitching data set
 pitching_df <- read_csv(here("data/pitching_stats.csv"))
+
+# Reading in each individual attendance data set
+attendance_2018 <- read_csv(here("data/2018attendance.csv"))
+attendance_2019 <- read_csv(here("data/2019attendance.csv"))
+attendance_2020 <- read_csv(here("data/2020attendance.csv"))
+attendance_2021 <- read_csv(here("data/2021attendance.csv"))
+attendance_2022 <- read_csv(here("data/2022attendance.csv"))
+attendance_2023 <- read_csv(here("data/2023attendance.csv"))
+attendance_2024 <- read_csv(here("data/2024attendance.csv"))
+
+# Reading in the world series data set
+worldseriesviewing <- read_csv(here("data/world-series-ratings.csv"))
+```
+
+```{r}
+# Creating a year variable in each of the attendance data sets
+attendance_2018$year <- 2018
+attendance_2019$year <- 2019
+attendance_2020$year <- 2020
+attendance_2021$year <- 2021
+attendance_2022$year <- 2022
+attendance_2023$year <- 2023
+attendance_2024$year <- 2024
+```
+
+```{r}
+# Create 3 joined data sets of the attendance data sets
+attendance2018_2019 <- full_join(attendance_2018, attendance_2019)
+attendance2020_2021 <- full_join(attendance_2020, attendance_2021)
+attendance2022_2023 <- full_join(attendance_2022, attendance_2023)
+
+# Join those 3 data sets together into 2 datasets
+attendance2018_2021 <- full_join(attendance2018_2019, attendance2020_2021)
+attendance2022_2024 <- full_join(attendance2022_2023, attendance_2024)
+
+# Join the last two big data sets in one big complete attendance data set
+attendancefull <- full_join(attendance2018_2021, attendance2022_2024)
+```
+
+```{r}
+# Save the attendance data set as a CSV so that I do not lose track of it
+write_csv(attendancefull, "attendancefull.csv")
 ```
 
