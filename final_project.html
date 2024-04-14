@@ -184,14 +184,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>si_avg_speed</code></td>
 <td>The average speed of sinkers for that pitcher in that season.</td>
 </tr>
-<tr class="even">
-<td><code>fastball_avg_spin</code></td>
-<td>The average speed of fastballs for that pitcher in that season.</td>
-</tr>
-<tr class="odd">
-<td><code>fastball_avg_spin</code></td>
-<td>The average spin rate of fastballs for that pitcher in that season.</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -279,9 +271,77 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="tv-viewership-dataset-description" class="level1">
 <h1>TV Viewership dataset description</h1>
-<ul>
-<li>I didnt make a table of this data because I am not sure about it * As a tentative tv viewership dataset I found this one on <a href="https://www.kaggle.com/datasets/mattop/world-series-baseball-television-ratings?resource=download">kaggle</a> that covers just world series game viewership between 2022 and 2024. I am trying to find a better dataset that is general tv viewership and includes 2023.</li>
-</ul>
+<p>As a tentative tv viewership dataset I found is this one from <a href="https://www.kaggle.com/datasets/mattop/world-series-baseball-television-ratings?resource=download">kaggle</a> that covers just world series game viewership between 2022 and 2024. I am trying to find a better dataset that is general tv viewership, however it seems that most if not all avialable mlb viewership data is focused solely on the world series. However, conclusions can still be drawn from this data as the world series are the most watched games in the baseball season, and if viewership is down for those its definitely down for the entire season.</p>
+<table class="table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 73%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>year</code></td>
+<td>The year of the world series.</td>
+</tr>
+<tr class="even">
+<td><code>network</code></td>
+<td>The network the world series was broadcast on.</td>
+</tr>
+<tr class="odd">
+<td><code>average_audience</code></td>
+<td>The average tv audience for the whole world series</td>
+</tr>
+<tr class="even">
+<td><code>game_1_audience</code></td>
+<td>The TV audience for game 1 of the world series.</td>
+</tr>
+<tr class="odd">
+<td><code>game_2_audience</code></td>
+<td>The TV audience for game 2 of the world series.</td>
+</tr>
+<tr class="even">
+<td><code>game_3_audience</code></td>
+<td>The TV audience for game 3 of the world series.</td>
+</tr>
+<tr class="odd">
+<td><code>game_4_audience</code></td>
+<td>The TV audience for game 4 of the world series.</td>
+</tr>
+<tr class="even">
+<td><code>game_5_audience</code></td>
+<td>The TV audience for game 5 of the world series.</td>
+</tr>
+<tr class="odd">
+<td><code>game_6_audience</code></td>
+<td>The TV audience for game 6 of the world series.</td>
+</tr>
+<tr class="even">
+<td><code>game_7_audience</code></td>
+<td>The TV audience for game 7 of the world series.</td>
+</tr>
+<tr class="odd">
+<td><code>total_games_played</code></td>
+<td>The number of games played in that world series</td>
+</tr>
+<tr class="even">
+<td><code>winning_team</code></td>
+<td>The winning team of that world series.</td>
+</tr>
+<tr class="odd">
+<td><code>losing_team</code></td>
+<td>The losing team of that world series.</td>
+</tr>
+<tr class="even">
+<td><code>losing_team_wins</code></td>
+<td>The number of wins for that losing team in that world series.</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="packages" class="level1">
 <h1>Packages</h1>
@@ -316,12 +376,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading in the pitching data set</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pitching_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/pitching_stats.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 778 Columns: 20
+<pre><code>Rows: 777 Columns: 17
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr  (1): last_name, first_name
-dbl (17): player_id, year, pa, home_run, k_percent, bb_percent, p_hit_by_pit...
-lgl  (2): fastball_avg_speed, fastball_avg_spin
+dbl (16): player_id, year, pa, home_run, k_percent, bb_percent, xba, xslg, s...
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -485,6 +544,84 @@ Managers, year)`</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the attendance data set as a CSV so that I do not lose track of it</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(attendancefull, <span class="st">"attendancefull.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="cleaning-and-tidying-data" class="level1">
+<h1>Cleaning and tidying data</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>pitching_df <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">pitcher =</span> <span class="st">`</span><span class="at">last_name, first_name</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>pitch_speeds_long <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_speed"</span>, <span class="st">"ch_avg_speed"</span>, <span class="st">"cu_avg_speed"</span>, <span class="st">"si_avg_speed"</span>), <span class="at">names_to =</span> <span class="st">"pitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"pitch_speed"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(pitch_speed, pitch_type) </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>pitch_spin_long <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_spin"</span>, <span class="st">"ch_avg_spin"</span>, <span class="st">"cu_avg_spin"</span>, <span class="st">"si_avg_spin"</span>), <span class="at">names_to =</span> <span class="st">"pitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"spin_rate"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(spin_rate, pitch_type) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># join the two new datasets</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>full_pitch <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(pitch_speeds_long, pitch_spin_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="reproducible-example-to-try-and-solve-the-code" class="level1">
+<h1>Reproducible example to try and solve the code</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>example <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">10</span><span class="sc">:</span><span class="dv">17</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>example_new <span class="ot">&lt;-</span> example <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">names_to =</span> <span class="st">"temp"</span>, <span class="at">values_to =</span> <span class="st">"speed_spin"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(temp, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"type"</span>, <span class="st">"drop"</span>, <span class="st">"spin_type"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>drop) <span class="sc">|&gt;</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(new_val, <span class="fu">c</span>(<span class="st">"type"</span>, <span class="st">"spin_type"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>example_new <span class="sc">|&gt;</span> <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"new_val"</span>, <span class="at">values_from =</span> <span class="st">"speed_spin"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 9
+  pitcher    sl_speed sl_spin ch_speed ch_spin cu_speed cu_spin si_speed si_spin
+  &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+1 Colon, Ba…     80.5    2388     80.8    1657       NA      NA     86.9    2136
+2 Sabathia,…     80      2250     83.4    1878       NA      NA     90.1    2027</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>example_speeds <span class="ot">&lt;-</span> example <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_speed"</span>, <span class="st">"ch_avg_speed"</span>, <span class="st">"cu_avg_speed"</span>, <span class="st">"si_avg_speed"</span>), <span class="at">names_to =</span> <span class="st">"pitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"pitch_speed"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(pitch_speed, pitch_type) </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>example_spin <span class="ot">&lt;-</span> example <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_spin"</span>, <span class="st">"ch_avg_spin"</span>, <span class="st">"cu_avg_spin"</span>, <span class="st">"si_avg_spin"</span>), <span class="at">names_to =</span> <span class="st">"pitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"spin_rate"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(spin_rate, pitch_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(example_speeds, example_spin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 12
+   pitch_speed pitch_type   sl_avg_spin ch_avg_spin cu_avg_spin si_avg_spin
+         &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+ 1        80.5 sl_avg_speed        2388        1657          NA        2136
+ 2        80.8 ch_avg_speed        2388        1657          NA        2136
+ 3        NA   cu_avg_speed        2388        1657          NA        2136
+ 4        86.9 si_avg_speed        2388        1657          NA        2136
+ 5        80   sl_avg_speed        2250        1878          NA        2027
+ 6        83.4 ch_avg_speed        2250        1878          NA        2027
+ 7        NA   cu_avg_speed        2250        1878          NA        2027
+ 8        90.1 si_avg_speed        2250        1878          NA        2027
+ 9        NA   sl_avg_spin           NA          NA          NA          NA
+10        NA   ch_avg_spin           NA          NA          NA          NA
+11        NA   cu_avg_spin           NA          NA          NA          NA
+12        NA   si_avg_spin           NA          NA          NA          NA
+13        NA   sl_avg_spin           NA          NA          NA          NA
+14        NA   ch_avg_spin           NA          NA          NA          NA
+15        NA   cu_avg_spin           NA          NA          NA          NA
+16        NA   si_avg_spin           NA          NA          NA          NA
+# ℹ 6 more variables: pitcher &lt;chr&gt;, spin_rate &lt;dbl&gt;, sl_avg_speed &lt;dbl&gt;,
+#   ch_avg_speed &lt;dbl&gt;, cu_avg_speed &lt;dbl&gt;, si_avg_speed &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>example_long <span class="ot">&lt;-</span>example <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_speed"</span>, <span class="st">"ch_avg_speed"</span>, <span class="st">"cu_avg_speed"</span>, <span class="st">"si_avg_speed"</span>), <span class="at">names_to =</span> <span class="st">"speedpitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"pitch_speed"</span>) <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_spin"</span>, <span class="st">"ch_avg_spin"</span>, <span class="st">"cu_avg_spin"</span>, <span class="st">"si_avg_spin"</span>), <span class="at">names_to =</span> <span class="st">"spinpitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"spin_rate"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(spin_rate, pitch_speed, speedpitch_type, spinpitch_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>examples_final <span class="ot">&lt;-</span> example_long <span class="sc">|&gt;</span> <span class="fu">separate</span>(speedpitch_type, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"pitchtype"</span>, <span class="st">"speed"</span>), <span class="at">sep =</span> <span class="st">"_avg_"</span>) <span class="sc">|&gt;</span> <span class="fu">separate</span>(spinpitch_type, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"pitch_type"</span>, <span class="st">"spin"</span>), <span class="at">sep =</span> <span class="st">"_avg_"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span>(<span class="fu">c</span>(pitchtype, speed, spin)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="apply-what-i-solved-from-the-example-to-the-real-dataset" class="level1">
+<h1>Apply what I solved from the example to the real dataset</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>pitching_cleaner <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_speed"</span>, <span class="st">"ch_avg_speed"</span>, <span class="st">"cu_avg_speed"</span>, <span class="st">"si_avg_speed"</span>), <span class="at">names_to =</span> <span class="st">"speedpitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"pitch_speed"</span>) <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_spin"</span>, <span class="st">"ch_avg_spin"</span>, <span class="st">"cu_avg_spin"</span>, <span class="st">"si_avg_spin"</span>), <span class="at">names_to =</span> <span class="st">"spinpitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"spin_rate"</span>) <span class="sc">|&gt;</span><span class="fu">separate</span>(speedpitch_type, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"pitchtype"</span>, <span class="st">"speed"</span>), <span class="at">sep =</span> <span class="st">"_avg_"</span>) <span class="sc">|&gt;</span> <span class="fu">separate</span>(spinpitch_type, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"pitch_type"</span>, <span class="st">"spin"</span>), <span class="at">sep =</span> <span class="st">"_avg_"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span>(<span class="fu">c</span>(pitchtype, speed, spin)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 

@@ -150,7 +150,7 @@ pitch_spin_long <- pitching_df |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "
 full_pitch <- bind_rows(pitch_speeds_long, pitch_spin_long)
 ```
 
-# Reproducible example
+# Reproducible example to try and solve the code
 ```{r}
 example <- pitching_df |> slice(1:2) |> select(c(10:17, 1)) |> as_tibble()
 example_new <- example |> pivot_longer(1:8, names_to = "temp", values_to = "speed_spin") |>
@@ -163,7 +163,6 @@ example_new <- example |> pivot_longer(1:8, names_to = "temp", values_to = "spee
 example_new |> pivot_wider(names_from = "new_val", values_from = "speed_spin")
 ```
 
-
 ```{r}
 example_speeds <- example |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "pitch_type", values_to =  "pitch_speed") |> relocate(pitch_speed, pitch_type) 
 
@@ -172,5 +171,78 @@ example_spin <- example |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_
 
 ```{r}
 bind_rows(example_speeds, example_spin)
+```
+
+```{r}
+example_long <-example |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |> relocate(spin_rate, pitch_speed, speedpitch_type, spinpitch_type)
+```
+
+```{r}
+examples_final <- example_long |> separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
+```
+
+
+# Apply what I solved from the example to the real dataset
+
+```{r}
+pitching_cleaner <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
+```
+
+
+```{r}
+# may need to slice data since it is pretty big
+small_pitching <- pitching_df |> arrange(desc(pa)) |> slice(1:200)
+
+small_clean_pitching <- small_pitching |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
+```
+
+
+# Cleaning up attendance and tv viewership dataframes 
+
+I do not need all of these variables in the data frame so I am going to get rid of some of them
+
+```{r}
+attendance_smaller <- attendancefull |> select(Tm, Attendance, `Attend/G`, Time, `Est. Payroll`)
+```
+
+Same deal here with the tv viewership 
+```{r}
+tv_views_smaller <- worldseriesviewing |> select(!c(winning_team, losing_team, losing_team_wins))
+```
+
+# Trying to work on brainstorming static visualization for tidy app
+
+```{r}
+pitching_cleaner |> group_by(pitch_type, pitcher, pitch_speed, spin_rate) |> summarise()
+```
+
+```{r}
+ggplot(data = small_clean_pitching, aes(y = spin_rate, x = pitch_speed, colour = pitch_type)) + geom_point()
+```
+
+```{r}
+ggplot(data = pitching_cleaner, aes(x= year, y = spin_rate)) + geom_point()
+```
+
+The visualizations are not looking great so I need to revisit how to clean the data
+
+```{r}
+pitch_speed <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitchspeed") 
+
+pitch_spin <- pitching_df |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spinrate")
+
+binded <- bind_rows(pitch_speed, pitch_spin)
+
+
+full_pitching <- binded |> separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
+```
+
+
+```{r}
+ggplot(data = full_pitching, aes(y = spinrate, x = pitchspeed, colour = pitch_type)) + geom_point()
+```
+
+```{r}
+ggplot(data = pitching_cleaner, aes(x= year, y = spin_rate)) + geom_point()
 ```
 
