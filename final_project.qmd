@@ -88,7 +88,7 @@ library(tidyverse)
 
 ```{r}
 # Reading in the pitching data set
-pitching_df <- read_csv(here("data/pitching_stats.csv"))
+pitching_df <- read_csv(here("data/pitchingstats.csv"))
 
 # Reading in each individual attendance data set
 attendance_2018 <- read_csv(here("data/2018attendance.csv"))
@@ -185,24 +185,15 @@ examples_final <- example_long |> separate(speedpitch_type, into = c("pitchtype"
 # Apply what I solved from the example to the real dataset
 
 ```{r}
-pitching_cleaner <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
+pitching_cleaner <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin))) 
 ```
-
-
-```{r}
-# may need to slice data since it is pretty big
-small_pitching <- pitching_df |> arrange(desc(pa)) |> slice(1:200)
-
-small_clean_pitching <- small_pitching |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
-```
-
 
 # Cleaning up attendance and tv viewership dataframes 
 
 I do not need all of these variables in the data frame so I am going to get rid of some of them
 
 ```{r}
-attendance_smaller <- attendancefull |> select(Tm, Attendance, `Attend/G`, Time, `Est. Payroll`)
+attendance_smaller <- attendancefull |> select(Tm, Attendance, `Attend/G`, Time, `Est. Payroll`, year)
 ```
 
 Same deal here with the tv viewership 
@@ -210,11 +201,24 @@ Same deal here with the tv viewership
 tv_views_smaller <- worldseriesviewing |> select(!c(winning_team, losing_team, losing_team_wins))
 ```
 
-# Trying to work on brainstorming static visualization for tidy app
+```{r}
+pitching_attendance <- left_join(pitching_cleaner, attendance_smaller)
+```
 
 ```{r}
-pitching_cleaner |> group_by(pitch_type, pitcher, pitch_speed, spin_rate) |> summarise()
+pitching_tv_attendance <- left_join(pitching_attendance, tv_views_smaller)
 ```
+
+```{r}
+pitching_cleaner |> group_by(year, pitch_type, pitch_speed, spin_rate) |> summarise()
+```
+
+```{r}
+pitching_cleaner |> group_by(year, pitch_speed, spin_rate) |> summarise(mean_spin = mean(spin_rate), mean_speed = mean(pitch_speed))
+```
+
+# Trying to work on brainstorming static visualization for tidy app
+
 
 ```{r}
 ggplot(data = small_clean_pitching, aes(y = spin_rate, x = pitch_speed, colour = pitch_type)) + geom_point()
@@ -239,10 +243,82 @@ full_pitching <- binded |> separate(speedpitch_type, into = c("pitchtype", "spee
 
 
 ```{r}
-ggplot(data = full_pitching, aes(y = spinrate, x = pitchspeed, colour = pitch_type)) + geom_point()
+# may need to slice data since it is pretty big
+small_pitching <- pitching_df |> arrange(desc(pa)) |> slice(1:200)
+
+small_clean_pitching <- small_pitching |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
 ```
 
 ```{r}
-ggplot(data = pitching_cleaner, aes(x= year, y = spin_rate)) + geom_point()
+pitching_cleaner |> group_by(year) |> summarise(pitch_speed_avg = mean(pitch_speed))
+```
+
+
+```{r}
+ggplot(data = full_pitching, aes(y = spinrate, x = pitchspeed, colour = pitch_type)) + geom_point()
+```
+
+
+```{r}
+ggplot(data = pitching_tv_attendance, aes(x = Attendance, y = spin_rate)) + geom_point()
+```
+
+```{r}
+ggplot(data = pitching_df, aes(x = home_run, y = sl_avg_spin)) + geom_point()
+```
+
+```{r}
+attendance_tv <- left_join(attendance_smaller, tv_views_smaller)
+attendance_tv <- attendance_tv |> mutate(small_attendance = Attendance/1000, small_audience = average_audience/1000)
+```
+
+```{r}
+complete <- left_join(pitching_cleaner, attendance_tv)
+```
+
+```{r}
+ggplot(attendance_tv, aes(x = small_attendance, y = small_audience)) + geom_point()
+```
+
+```{r}
+ggplot(data = complete, aes(y = spin_rate, x = Attendance/10000)) + geom_col()
+```
+
+#  For now I am deciding that since the main issue is the attendance dataset I am going to try and make the shiny app just for the pitching data and then go back to the attendance stuff
+
+For now this is the static graph I will use but I will change it to something more complicated, I just want to see how this will work
+
+```{r}
+ggplot(data = pitching_cleaner, aes(x= home_run, y = spin_rate, colour = pitch_type)) + geom_point()
+```
+
+```{r}
+library(shiny)
+year_choices <- pitching_cleaner |> distinct(year) |> pull(year)
+x_var_choices <- names(pitching_cleaner)[c(11, 13)]
+y_var_choices <- names(pitching_cleaner)[c(5:10)]
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons("year_sel", label = "Choose a year:", choices = year_choices),
+      radioButtons("x_var_sel", label = "Choose an x-variable:", choices = x_var_choices),
+      selectInput("y_var_sel", label = "Choose a y-variable:", choices = y_var_choices)
+    ),
+    mainPanel(plotOutput("scatterplot")
+      
+    )
+  )
+  
+)
+
+server <- function(input, output, session) {
+ pitching_reactive <- reactive({
+   pitching1 <- pitching_cleaner |> filter(year == input$year_sel) 
+})
+output$scatterplot <- renderPlot({ggplot(pitching_reactive(), aes(x= .data[[input$x_var_sel]], y = .data[[input$y_var_sel]], colour = pitch_type)) + geom_point() + theme_minimal()})
+  
+}
+
+shinyApp(ui, server)
 ```
 
