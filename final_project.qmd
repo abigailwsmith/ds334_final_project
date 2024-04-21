@@ -307,6 +307,75 @@ ggplot(data = attendance_tv, aes(x = year, y = average_audience)) + geom_col()
 ```
 
 ```{r}
+pitchspeed <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "pitch_type", values_to =  "pitch_speed") |> select(!c(sl_avg_spin, ch_avg_spin, cu_avg_spin, si_avg_spin))
+
+pitchspin <- pitching_df |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "pitch_type", values_to =  "spin_rate")|> select(!c(sl_avg_speed, ch_avg_speed, cu_avg_speed, si_avg_speed)) 
+```
+
+```{r}
+library(shiny)
+year_speed <- pitchspeed |> distinct(year) |> pull(year)
+year_spin <- pitchspeed |> distinct(year) |> pull(year)
+speed_y_var_choices <- names(pitchspeed)[c(5:10)]
+spin_y_var_choices <- names(pitchspin)[c(5:10)]
+speed_pitch_choice <- pitchspeed |> distinct(pitch_type) |> pull(pitch_type)
+spin_pitch_choice <- pitchspin |> distinct(pitch_type) |> pull(pitch_type)
+x_var <- names(attendance_tv)[c(2, 3, 8)]
+year_choices_attendance <- attendance_tv|> distinct(year) |> pull(year)
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons("speed_year_sel", label = "Choose a year for pitch speed:", choices = year_speed),
+      radioButtons("spin_year_sel", label = "Choose a year for spin rate:", choices = year_spin),
+      selectizeInput("speed_pitch_sel", label = "Choose pitch type:",
+                     choices = pitchspeed$pitch_type, selected = "ch",
+                     multiple = TRUE),
+      selectizeInput("spin_pitch_sel", label = "Choose pitch type:",
+                     choices = pitchspin$pitch_type, selected = "ch",
+                     multiple = TRUE),
+      selectInput("speed_y_var_sel", label = "Choose a y-variable for pitching speed:", choices = speed_y_var_choices),
+      selectInput("spin_y_var_sel", label = "Choose a y-variable for pitching speed:", choices = spin_y_var_choices),
+      radioButtons("x_sel", label = "Choose an attendance variable:", choices = y_var),
+      radioButtons("year_sel_attendance", label = "Choose a year for the attendance:", choices = year_choices_pitching)
+    ),
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Fluid Data", plotOutput("scatterplot_speed"), plotOutput("scatterplot_spin"), plotOutput("barplot")),
+        tabPanel("Static Data", plotOutput("attendance_line"), plotOutput("audience_bar"))
+      )
+    )
+  )
+  
+)
+
+
+server <- function(input, output, session) {
+ speed_pitching_reactive <- reactive({
+   speed1 <- pitchspeed |> filter(year == input$speed_year_sel) |> filter(pitch_type %in% input$speed_pitch_sel)
+})
+ spin_pitching_reactive <- reactive({
+   spin1 <- pitchspin |> filter(year == input$spin_year_sel) |> filter(pitch_type %in% input$spin_pitch_sel)
+})
+ 
+ 
+output$scatterplot_speed <- renderPlot({ggplot(speed_pitching_reactive(), aes(x= pitch_speed, y = .data[[input$speed_y_var_sel]], colour = pitch_type)) + geom_point() + theme_minimal() + labs(title = glue::glue("Scatterplot of pitchspeed against ",  input$speed_y_var_sel, " in ", input$speed_year_sel))})
+
+output$scatterplot_spin <- renderPlot({ggplot(spin_pitching_reactive(), aes(x= spin_rate, y = .data[[input$spin_y_var_sel]], colour = pitch_type)) + geom_point() + theme_minimal() + labs(title = glue::glue("Scatterplot of spin rate against ",  input$spin_y_var_sel, " in ", input$spin_year_sel))})
+  attendance_reactive <- reactive({
+    attendance1 <- attendance_tv|> filter(year == input$year_sel_attendance) |>  mutate(Tm = fct_reorder(Tm, .data[[input$x_sel]]))
+  })
+output$barplot <- renderPlot({ggplot(attendance_reactive(), aes(x = Tm, y = .data[[input$x_sel]])) + geom_col() + coord_flip() + theme_minimal() + labs(title = glue::glue("Barplot of ", input$x_sel, " in ", input$year_sel_attendance)) })
+
+output$attendance_line <- renderPlot({ggplot(attendance_tv, aes(x = year, y = `Attend/G`, colour = Tm)) + geom_line() + theme_minimal() + labs(title = "Average Attendance per Game Over Time ") })
+
+output$audience_bar <- renderPlot({ggplot(data = attendance_tv, aes(x = year, y = average_audience)) + geom_col() + theme_minimal() + labs(title = "Average TV Audience per World Series Game In Each Year ") })
+}
+
+shinyApp(ui, server)
+```
+
+
+```{r}
 library(shiny)
 year_choices_pitching <- pitching_cleaner |> distinct(year) |> pull(year)
 x_var_choices <- names(pitching_cleaner)[c(11, 13)]
@@ -318,11 +387,13 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       radioButtons("year_sel", label = "Choose a year for pitching:", choices = year_choices_pitching),
+      selectizeInput("pitch_sel", label = "Choose pitch type:",
+                     choices = pitching_cleaner$pitch_type, selected = "ch",
+                     multiple = TRUE),
       radioButtons("x_var_sel", label = "Choose an x-variable for pitching:", choices = x_var_choices),
       selectInput("y_var_sel", label = "Choose a y-variable for pitching:", choices = y_var_choices),
       radioButtons("x_sel", label = "Choose an attendance variable:", choices = y_var),
-      radioButtons("year_sel_attendance", label = "Choose a year for the attendance:", choices = year_choices_pitching),
-      radioButtons("pitch_sel", label = "Choose pitchtype:", choices = pitch_choice)
+      radioButtons("year_sel_attendance", label = "Choose a year for the attendance:", choices = year_choices_pitching)
     ),
     mainPanel(
       tabsetPanel(
@@ -337,9 +408,9 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
  pitching_reactive <- reactive({
-   pitching1 <- pitching_cleaner |> filter(year == input$year_sel) |> filter(pitch_type == input$pitch_sel) 
+   pitching1 <- pitching_cleaner |> filter(year == input$year_sel) |> filter(pitch_type %in% input$pitch_sel)
 })
-output$scatterplot <- renderPlot({ggplot(pitching_reactive(), aes(x= .data[[input$x_var_sel]], y = .data[[input$y_var_sel]])) + geom_point() + theme_minimal() + labs(title = glue::glue("Scatterplot of ", input$x_var_sel, " against ",  input$y_var_sel, " in ", input$year_sel))})
+output$scatterplot <- renderPlot({ggplot(pitching_reactive(), aes(x= .data[[input$x_var_sel]], y = .data[[input$y_var_sel]], colour = pitch_type)) + geom_point() + theme_minimal() + labs(title = glue::glue("Scatterplot of ", input$x_var_sel, " against ",  input$y_var_sel, " in ", input$year_sel))})
   attendance_reactive <- reactive({
     attendance1 <- attendance_tv|> filter(year == input$year_sel_attendance) |>  mutate(Tm = fct_reorder(Tm, .data[[input$x_sel]]))
   })
@@ -353,7 +424,7 @@ output$audience_bar <- renderPlot({ggplot(data = attendance_tv, aes(x = year, y 
 shinyApp(ui, server)
 ```
 
-* maybe do a select what pitches to show
+* maybe do a select what pitches to show 
 ```{r}
 ggplot(pitching_cleaner, aes(x= pitch_speed, y = home_run, colour = pitch_type)) + geom_point(alpha = 0.2) + theme_minimal()
 ```
@@ -371,5 +442,12 @@ ggplot(pitching_cleaner, aes(x = spin_rate, y = pitch_speed, colour = as.factor(
 ggplot(attendance_tv, aes(x = `Attend/G`/1000, y = average_audience/1000, colour = Tm)) + geom_point(alpha = 0.2) + facet_wrap(~year) # try and see about adding a label for 2021 points
 ```
 
+```{r}
+ggplot(pitching_cleaner, aes(x = pitch_speed)) + geom_histogram() + facet_wrap(~year)
+```
+
+```{r}
+ggplot(pitching_cleaner, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year)
+```
 
 
