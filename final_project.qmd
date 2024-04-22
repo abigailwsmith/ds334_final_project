@@ -4,77 +4,78 @@ format: html
 ---
 
 # Abstract/Brainstorm
-*   still very much so a work in progress, more of a brainstorm than an abstract    *
 
-I am thinking to do a project on the "Sticky Stuff" scandal in Major League Baseball in 2021. The scandal involved Major League Baseball pitchers using sticky substances on their hands, to increase spin rate adn decrease pitch speed, increasing their strike outs and making it harder for the batter to hit the ball. Ultimeatley I would like to create a shiny app to look at how the sticky stuff scandal impacted the MLB financially, this could be found by looking at attendance and tv viewership. I also think it could be interesting to see how the scandal impacted batting statistics. 
+-   still very much so a work in progress, more of a brainstorm than an abstract \*
+
+I am thinking to do a project on the "Sticky Stuff" scandal in Major League Baseball in 2021. The scandal involved Major League Baseball pitchers using sticky substances on their hands, to increase spin rate adn decrease pitch speed, increasing their strike outs and making it harder for the batter to hit the ball. Ultimeatley I would like to create a shiny app to look at how the sticky stuff scandal impacted the MLB financially, this could be found by looking at attendance and tv viewership. I also think it could be interesting to see how the scandal impacted batting statistics.
 
 # Pitching dataset description
 
-The initial data set that I read in is from MLB's Statcast Feature, it is accessible on the [Baseball Savant website](https://baseballsavant.mlb.com/leaderboard/custom?year=2024%2C2023%2C2022%2C2021%2C2020%2C2019%2C2018&type=pitcher&filter=&min=q&selections=pa%2Chome_run%2Ck_percent%2Cbb_percent%2Cxba%2Cxslg%2Csl_avg_speed%2Csl_avg_spin%2Cch_avg_speed%2Cch_avg_spin%2Ccu_avg_speed%2Ccu_avg_spin%2Csi_avg_speed%2Csi_avg_spin&chart=false&x=pa&y=pa&r=no&chartType=beeswarm&sort=pa&sortDir=desc). I adjusted the data frame to include pitching statistics for individual pitchers in the years 2018-2024 for the whole MLB. The below table describes each of the variables in the data set. 
+The initial data set that I read in is from MLB's Statcast Feature, it is accessible on the [Baseball Savant website](https://baseballsavant.mlb.com/leaderboard/custom?year=2024%2C2023%2C2022%2C2021%2C2020%2C2019%2C2018&type=pitcher&filter=&min=q&selections=pa%2Chome_run%2Ck_percent%2Cbb_percent%2Cxba%2Cxslg%2Csl_avg_speed%2Csl_avg_spin%2Cch_avg_speed%2Cch_avg_spin%2Ccu_avg_speed%2Ccu_avg_spin%2Csi_avg_speed%2Csi_avg_spin&chart=false&x=pa&y=pa&r=no&chartType=beeswarm&sort=pa&sortDir=desc). I adjusted the data frame to include pitching statistics for individual pitchers in the years 2018-2024 for the whole MLB. The below table describes each of the variables in the data set.
 
-| Variable | Description                                                                                                                |
-|-------------------|-----------------------------------------------------|
-|`last_name, first_name`    | The last and first name of the player.                                            |
-|` player_id`     |   An identifying number for each player                                            |
-|   `year`   |   The year for the case.                                            |
-| `pa`      |Stands for players against, meaning its the number of batters that pitcher faced in the season.                                              |
-|`home_run`|The number of home runs allowed by the pitcher in that season.|
-|`k_percent`|The strike out percentage, the number of strike outs per batter faced by the pitcher.|
-|`bb_percent`|The walk percentage, the number of walks per batter faced by the pitcher.|
-|`p_hit_by_pitch`|The number of batters hit by the pitcher in that season.|
-|`xba`|Opposing players' batting average against the pitcher in that season.|
-|`xslg`|Opposing players' slugging average against the pitcher in that season.|
-|`sl_avg_speed`|The average speed of sliders for that pitcher in that season.|
-|`sl_avg_spin`|The average spin rate of sliders for that pitcher in that season.|
-|`ch_avg_speed`|The average speed of changeups for that pitcher in that season.|
-|`ch_avg_spin`|The average spin rate of changeups for that pitcher in that season.|
-|`cu_avg_speed`|The average speed of cutters for that pitcher in that season.|
-|`cu_avg_spin`|The average spin rate of cutters for that pitcher in that season.|
-|`si_avg_speed`|The average speed of sinkers for that pitcher in that season.|
+| Variable                | Description                                                                                     |
+|-----------------|-------------------------------------------------------|
+| `last_name, first_name` | The last and first name of the player.                                                          |
+| `player_id`             | An identifying number for each player                                                           |
+| `year`                  | The year for the case.                                                                          |
+| `pa`                    | Stands for players against, meaning its the number of batters that pitcher faced in the season. |
+| `home_run`              | The number of home runs allowed by the pitcher in that season.                                  |
+| `k_percent`             | The strike out percentage, the number of strike outs per batter faced by the pitcher.           |
+| `bb_percent`            | The walk percentage, the number of walks per batter faced by the pitcher.                       |
+| `p_hit_by_pitch`        | The number of batters hit by the pitcher in that season.                                        |
+| `xba`                   | Opposing players' batting average against the pitcher in that season.                           |
+| `xslg`                  | Opposing players' slugging average against the pitcher in that season.                          |
+| `sl_avg_speed`          | The average speed of sliders for that pitcher in that season.                                   |
+| `sl_avg_spin`           | The average spin rate of sliders for that pitcher in that season.                               |
+| `ch_avg_speed`          | The average speed of changeups for that pitcher in that season.                                 |
+| `ch_avg_spin`           | The average spin rate of changeups for that pitcher in that season.                             |
+| `cu_avg_speed`          | The average speed of cutters for that pitcher in that season.                                   |
+| `cu_avg_spin`           | The average spin rate of cutters for that pitcher in that season.                               |
+| `si_avg_speed`          | The average speed of sinkers for that pitcher in that season.                                   |
 
 # Attendance datasets descriptions
 
-Additionally, I used [basbeall-reference](https://www.baseball-reference.com/leagues/majors/2024-misc.shtml) for data on baseball attendance, in the years 2018-2024. For this data, it was all in individual data sets which I had to join together into one big one. In each dataset the variables are the same which I created a table for. 
+Additionally, I used [basbeall-reference](https://www.baseball-reference.com/leagues/majors/2024-misc.shtml) for data on baseball attendance, in the years 2018-2024. For this data, it was all in individual data sets which I had to join together into one big one. In each dataset the variables are the same which I created a table for.
 
-| Variable | Description                                                                                                                |
-|-------------------|-----------------------------------------------------|
-|`Tm`    | The team's name.                                         |
-|`Attendance`     |  Total attendance for home games that season.                                          |
-|   `Attendance/G`   |  Average attendance per home game that season.                                            |
-| `BatAge`      |Batter's average age in that season.                                              |
-|`PAge`|Pitcher's average age in that season.|
-|`BPF`|Batting park factor, a scale used to measure if a ballpark favors batters (>100) or pitchers (<100).|
-|`PPF`|Pitching park factor, a scale used to measure if a ballpark favors batters (>100) or pitchers (<100).|
-|`#HOF`|The number of players currently in hall of fame on that team in that season.|
-|`#A-S`|The number of allstars on that team in that season.|
-|`#a-tA-S`|The number of allstars on that team at any point in their career.|
-|`Est. Payroll`|The estimated payroll of the team.|
-|`Time`|The average game time in that season.|
-|`Chall`|The average number of challenges per game in that season.|
-|`Succ`|The average number of successful challenges per game in that season.|
-|`Succ%`|The percentage of successful challenges per game in that season..|
-|`Managers`|The name of the team's manager that season.|
+| Variable       | Description                                                                                             |
+|---------------|---------------------------------------------------------|
+| `Tm`           | The team's name.                                                                                        |
+| `Attendance`   | Total attendance for home games that season.                                                            |
+| `Attendance/G` | Average attendance per home game that season.                                                           |
+| `BatAge`       | Batter's average age in that season.                                                                    |
+| `PAge`         | Pitcher's average age in that season.                                                                   |
+| `BPF`          | Batting park factor, a scale used to measure if a ballpark favors batters (\>100) or pitchers (\<100).  |
+| `PPF`          | Pitching park factor, a scale used to measure if a ballpark favors batters (\>100) or pitchers (\<100). |
+| `#HOF`         | The number of players currently in hall of fame on that team in that season.                            |
+| `#A-S`         | The number of allstars on that team in that season.                                                     |
+| `#a-tA-S`      | The number of allstars on that team at any point in their career.                                       |
+| `Est. Payroll` | The estimated payroll of the team.                                                                      |
+| `Time`         | The average game time in that season.                                                                   |
+| `Chall`        | The average number of challenges per game in that season.                                               |
+| `Succ`         | The average number of successful challenges per game in that season.                                    |
+| `Succ%`        | The percentage of successful challenges per game in that season..                                       |
+| `Managers`     | The name of the team's manager that season.                                                             |
 
 # TV Viewership dataset description
 
 As a tentative tv viewership dataset I found is this one from [kaggle](https://www.kaggle.com/datasets/mattop/world-series-baseball-television-ratings?resource=download) that covers just world series game viewership between 2022 and 2024. I am trying to find a better dataset that is general tv viewership, however it seems that most if not all avialable mlb viewership data is focused solely on the world series. However, conclusions can still be drawn from this data as the world series are the most watched games in the baseball season, and if viewership is down for those its definitely down for the entire season.
 
-| Variable | Description                                                                                                                |
+| Variable             | Description                                                   |
 |-------------------|-----------------------------------------------------|
-|`year`    | The year of the world series.                                       |
-|`network`     |  The network the world series was broadcast on.                                         |
-|   `average_audience`   |  The average tv audience for the whole world series                                           |
-| `game_1_audience`      |The TV audience for game 1 of the world series.                                      |
-| `game_2_audience`      |The TV audience for game 2 of the world series.|
-| `game_3_audience`      |The TV audience for game 3 of the world series.                                      |
-| `game_4_audience`      |The TV audience for game 4 of the world series.                                      |
-| `game_5_audience`      |The TV audience for game 5 of the world series.                                      |
-| `game_6_audience`      |The TV audience for game 6 of the world series.                                      |
-| `game_7_audience`      |The TV audience for game 7 of the world series.                                      |
-| `total_games_played`      |The number of games played in that world series                                     |
-| `winning_team`      |The winning team of that world series.                                    |
-| `losing_team`      |The losing team of that world series.                                    |
-| `losing_team_wins`      |The number of wins for that losing team in that world series.      |
+| `year`               | The year of the world series.                                 |
+| `network`            | The network the world series was broadcast on.                |
+| `average_audience`   | The average tv audience for the whole world series            |
+| `game_1_audience`    | The TV audience for game 1 of the world series.               |
+| `game_2_audience`    | The TV audience for game 2 of the world series.               |
+| `game_3_audience`    | The TV audience for game 3 of the world series.               |
+| `game_4_audience`    | The TV audience for game 4 of the world series.               |
+| `game_5_audience`    | The TV audience for game 5 of the world series.               |
+| `game_6_audience`    | The TV audience for game 6 of the world series.               |
+| `game_7_audience`    | The TV audience for game 7 of the world series.               |
+| `total_games_played` | The number of games played in that world series               |
+| `winning_team`       | The winning team of that world series.                        |
+| `losing_team`        | The losing team of that world series.                         |
+| `losing_team_wins`   | The number of wins for that losing team in that world series. |
 
 # Packages
 
@@ -82,6 +83,7 @@ As a tentative tv viewership dataset I found is this one from [kaggle](https://w
 library(here)
 library(readr)
 library(tidyverse)
+library(plotly)
 ```
 
 # Data
@@ -151,6 +153,7 @@ full_pitch <- bind_rows(pitch_speeds_long, pitch_spin_long)
 ```
 
 # Reproducible example to try and solve the code
+
 ```{r}
 example <- pitching_df |> slice(1:2) |> select(c(10:17, 1)) |> as_tibble()
 example_new <- example |> pivot_longer(1:8, names_to = "temp", values_to = "speed_spin") |>
@@ -181,15 +184,15 @@ example_long <-example |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg
 examples_final <- example_long |> separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
 ```
 
-
 # Apply what I solved from the example to the real dataset
 
 ```{r}
 pitching_cleaner <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin))) 
+
+pitching_cleaner <- pitching_cleaner |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) |> relocate(pitch_type)
 ```
 
-
-# Cleaning up attendance and tv viewership dataframes 
+# Cleaning up attendance and tv viewership dataframes
 
 I do not need all of these variables in the data frame so I am going to get rid of some of them
 
@@ -197,7 +200,8 @@ I do not need all of these variables in the data frame so I am going to get rid 
 attendance_smaller <- attendancefull |> select(Tm, Attendance, `Attend/G`, Time, `Est. Payroll`, year)
 ```
 
-Same deal here with the tv viewership 
+Same deal here with the tv viewership
+
 ```{r}
 tv_views_smaller <- worldseriesviewing |> select(!c(winning_team, losing_team, losing_team_wins))
 ```
@@ -220,7 +224,6 @@ pitching_cleaner |> group_by(year, pitch_speed, spin_rate) |> summarise(mean_spi
 
 # Trying to work on brainstorming static visualization for tidy app
 
-
 ```{r}
 ggplot(data = small_clean_pitching, aes(y = spin_rate, x = pitch_speed, colour = pitch_type)) + geom_point()
 ```
@@ -242,7 +245,6 @@ binded <- bind_rows(pitch_speed, pitch_spin)
 full_pitching <- binded |> separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
 ```
 
-
 ```{r}
 # may need to slice data since it is pretty big
 small_pitching <- pitching_df |> arrange(desc(pa)) |> slice(1:200)
@@ -254,11 +256,9 @@ small_clean_pitching <- small_pitching |> pivot_longer(c("sl_avg_speed", "ch_avg
 pitching_cleaner |> group_by(year) |> summarise(pitch_speed_avg = mean(pitch_speed))
 ```
 
-
 ```{r}
 ggplot(data = full_pitching, aes(y = spinrate, x = pitchspeed, colour = pitch_type)) + geom_point()
 ```
-
 
 ```{r}
 ggplot(data = pitching_tv_attendance, aes(x = Attendance, y = spin_rate)) + geom_point()
@@ -285,7 +285,7 @@ ggplot(attendance_tv, aes(x = small_attendance, y = small_audience)) + geom_poin
 ggplot(data = complete, aes(y = spin_rate, x = Attendance/10000)) + geom_col()
 ```
 
-#  For now I am deciding that since the main issue is the attendance dataset I am going to try and make the shiny app just for the pitching data and then go back to the attendance stuff
+# For now I am deciding that since the main issue is the attendance dataset I am going to try and make the shiny app just for the pitching data and then go back to the attendance stuff
 
 For now this is the static graph I will use but I will change it to something more complicated, I just want to see how this will work
 
@@ -307,9 +307,39 @@ ggplot(data = attendance_tv, aes(x = year, y = average_audience)) + geom_col()
 ```
 
 ```{r}
+ggplot(pitchspeed, aes(x = pitch_speed)) + geom_histogram() + facet_wrap(~year)
+```
+
+```{r}
+ggplot(pitchspin, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year)
+```
+
+```{r}
 pitchspeed <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "pitch_type", values_to =  "pitch_speed") |> select(!c(sl_avg_spin, ch_avg_spin, cu_avg_spin, si_avg_spin))
 
 pitchspin <- pitching_df |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "pitch_type", values_to =  "spin_rate")|> select(!c(sl_avg_speed, ch_avg_speed, cu_avg_speed, si_avg_speed)) 
+```
+
+```{r}
+slice_speed <- pitchspeed |> arrange(desc(pa)) |> slice(1:20)
+```
+
+```{r}
+slice_spin <- pitchspin |> arrange(desc(pa)) |> slice(1:20)
+```
+
+```{r}
+slice_attendance <- attendance_tv |> arrange(desc(Attendance)) |> slice(1:30)
+```
+
+```{r}
+speed_new <- pitchspeed |> mutate(pitch_type = str_remove(pitch_type, "_avg_speed")) |> relocate(pitch_type)
+
+speed_pitch <- speed_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) |> relocate(pitch_type)
+
+spin_new <- pitchspin |> mutate(pitch_type = str_remove(pitch_type, "_avg_spin")) |> relocate(pitch_type)
+
+spin_pitch <- spin_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) |> relocate(pitch_type)
 ```
 
 ```{r}
@@ -326,26 +356,27 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       radioButtons("speed_year_sel", label = "Choose a year for pitch speed:", choices = year_speed),
-      radioButtons("spin_year_sel", label = "Choose a year for spin rate:", choices = year_spin),
-      selectizeInput("speed_pitch_sel", label = "Choose pitch type:",
-                     choices = pitchspeed$pitch_type, selected = "ch",
-                     multiple = TRUE),
-      selectizeInput("spin_pitch_sel", label = "Choose pitch type:",
-                     choices = pitchspin$pitch_type, selected = "ch",
+      selectizeInput("speed_pitch_sel", label = "Choose a pitch type for pitch speed:",
+                     choices = pitchspeed$pitch_type, selected = "sl_avg_speed",
                      multiple = TRUE),
       selectInput("speed_y_var_sel", label = "Choose a y-variable for pitching speed:", choices = speed_y_var_choices),
+      radioButtons("spin_year_sel", label = "Choose a year for spin rate:", choices = year_spin),
+      selectizeInput("spin_pitch_sel", label = "Choose a pitch type for spin rate:",
+                     choices = pitchspin$pitch_type, selected = "sl_avg_spin",
+                     multiple = TRUE),
       selectInput("spin_y_var_sel", label = "Choose a y-variable for pitching speed:", choices = spin_y_var_choices),
       radioButtons("x_sel", label = "Choose an attendance variable:", choices = y_var),
-      radioButtons("year_sel_attendance", label = "Choose a year for the attendance:", choices = year_choices_pitching)
+      radioButtons("year_sel_attendance", label = "Choose a year for the attendance:", choices = year_choices_pitching),
+      selectizeInput("tm_sel", label = "Choose a team:", choices = attendance_tv$Tm, selected = "Arizona Diamondbacks", multiple = TRUE)
     ),
     mainPanel(
       tabsetPanel(
         tabPanel("Fluid Data", plotOutput("scatterplot_speed"), plotOutput("scatterplot_spin"), plotOutput("barplot")),
-        tabPanel("Static Data", plotOutput("attendance_line"), plotOutput("audience_bar"))
+        tabPanel("Static Data", plotOutput("attendance_line"), plotOutput("audience_bar"), plotOutput("speedhist"), plotOutput("spinhist")), tabPanel("Data Tables", dataTableOutput("speed_raw_data"), dataTableOutput("spin_raw_data"), dataTableOutput("attendance_raw_data"))
       )
     )
   )
-  
+
 )
 
 
@@ -356,6 +387,9 @@ server <- function(input, output, session) {
  spin_pitching_reactive <- reactive({
    spin1 <- pitchspin |> filter(year == input$spin_year_sel) |> filter(pitch_type %in% input$spin_pitch_sel)
 })
+ attendancereactive <- reactive({
+   team1 <- attendance_tv |> filter(Tm %in% input$tm_sel)
+ })
  
  
 output$scatterplot_speed <- renderPlot({ggplot(speed_pitching_reactive(), aes(x= pitch_speed, y = .data[[input$speed_y_var_sel]], colour = pitch_type)) + geom_point() + theme_minimal() + labs(title = glue::glue("Scatterplot of pitchspeed against ",  input$speed_y_var_sel, " in ", input$speed_year_sel))})
@@ -366,14 +400,30 @@ output$scatterplot_spin <- renderPlot({ggplot(spin_pitching_reactive(), aes(x= s
   })
 output$barplot <- renderPlot({ggplot(attendance_reactive(), aes(x = Tm, y = .data[[input$x_sel]])) + geom_col() + coord_flip() + theme_minimal() + labs(title = glue::glue("Barplot of ", input$x_sel, " in ", input$year_sel_attendance)) })
 
-output$attendance_line <- renderPlot({ggplot(attendance_tv, aes(x = year, y = `Attend/G`, colour = Tm)) + geom_line() + theme_minimal() + labs(title = "Average Attendance per Game Over Time ") })
+output$attendance_line <- renderPlot({ggplot(attendancereactive(), aes(x = year, y = `Attend/G`, colour = Tm)) + geom_line() + theme_minimal() + labs(title = "Average Attendance per Game Over Time ") })
 
 output$audience_bar <- renderPlot({ggplot(data = attendance_tv, aes(x = year, y = average_audience)) + geom_col() + theme_minimal() + labs(title = "Average TV Audience per World Series Game In Each Year ") })
+
+output$speedhist <- renderPlot({ggplot(data = pitchspeed, aes(x = pitch_speed)) + geom_histogram() + facet_wrap(~year) + theme_minimal() + labs(title = "Histogram of pitch speed faceted by year")})
+
+output$spinhist <- renderPlot({ggplot(data = pitchspin, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year) + theme_minimal() + labs(title = "Histogram of spin rate facted by year")})
+  
+output$speed_raw_data <- renderDataTable({pitchspeed})
+output$spin_raw_data <- renderDataTable({pitchspin})
+output$attendance_raw_data <- renderDataTable({attendance_tv})
+
 }
 
 shinyApp(ui, server)
 ```
 
+# Plotly
+
+```{r}
+scatter <- ggplot(pitching_cleaner, aes(x= pitch_speed, y = spin_rate, colour = pitch_type, label = year)) + geom_point(alpha = 0.2) + theme_minimal() + labs(title = "Plotly scatterplot of spin_rate against pitch speed in which the year of each pitch is hown when hovering over")
+
+ggplotly(scatter, tooltip = "year")
+```
 
 ```{r}
 library(shiny)
@@ -398,7 +448,7 @@ ui <- fluidPage(
     mainPanel(
       tabsetPanel(
         tabPanel("Fluid Data", plotOutput("scatterplot"), plotOutput("barplot")),
-        tabPanel("Static Data", plotOutput("attendance_line"), plotOutput("audience_bar"))
+        tabPanel("Static Data", plotlyOutput("interscatter"), plotOutput("attendance_line"), plotOutput("audience_bar"))
       )
     )
   )
@@ -419,35 +469,9 @@ output$barplot <- renderPlot({ggplot(attendance_reactive(), aes(x = Tm, y = .dat
 output$attendance_line <- renderPlot({ggplot(attendance_tv, aes(x = year, y = `Attend/G`, colour = Tm)) + geom_line() + theme_minimal() + labs(title = "Average Attendance per Game Over Time ") })
 
 output$audience_bar <- renderPlot({ggplot(data = attendance_tv, aes(x = year, y = average_audience)) + geom_col() + theme_minimal() + labs(title = "Average TV Audience per World Series Game In Each Year ") })
+
+output$interscatter <- renderPlotly({ggplotly(scatter, tooltip = "year")})
 }
 
 shinyApp(ui, server)
 ```
-
-* maybe do a select what pitches to show 
-```{r}
-ggplot(pitching_cleaner, aes(x= pitch_speed, y = home_run, colour = pitch_type)) + geom_point(alpha = 0.2) + theme_minimal()
-```
-
-```{r}
-pitching_top10 <- pitching_cleaner |> arrange(desc(pa)) |> slice(1:100)
-ggplot(pitching_top10, aes(x = year, y = spin_rate, colour = pitcher)) + geom_line() + facet_wrap(~pitch_type)
-```
-
-```{r}
-ggplot(pitching_cleaner, aes(x = spin_rate, y = pitch_speed, colour = as.factor(year))) + geom_point(alpha = 0.2) # try and see about adding a label for 2021 points
-```
-
-```{r}
-ggplot(attendance_tv, aes(x = `Attend/G`/1000, y = average_audience/1000, colour = Tm)) + geom_point(alpha = 0.2) + facet_wrap(~year) # try and see about adding a label for 2021 points
-```
-
-```{r}
-ggplot(pitching_cleaner, aes(x = pitch_speed)) + geom_histogram() + facet_wrap(~year)
-```
-
-```{r}
-ggplot(pitching_cleaner, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year)
-```
-
-
