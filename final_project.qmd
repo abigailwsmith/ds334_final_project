@@ -3,11 +3,13 @@ title: "Final Project"
 format: html
 ---
 
-# Abstract/Brainstorm
+# Abstract
 
--   still very much so a work in progress, more of a brainstorm than an abstract \*
+My project is focused on the "Sticky Stuff" scandal in Major League Baseball (MLB) in 2021. The scandal involved MLB pitchers using sticky substances on their hands to increase their spin rate and decrease pitch speed. While pitchers have always used simple substances such as sunscreen and rosin to gain grip, pitchers were now using materials such as Spider Tack an extremely high stick glue like substance to gain grip. Furthermore, some teams had even begun hiring chemists to develop specific substances of extreme strength. Pitchers would hide this material on their glove or hat and then rub it on their hands to gain grip. The higher spin rates resulted in an increase in strike outs as it is harder for the batter to hit the ball when it has so much movement. Additionally, more batters were getting hit since pitchers had less control and the amount of home runs hit went down dramatically since again the ball grew harder to hit. These excessive changes in hitting patterns led to the MLB leading a major cut down on the substances, banning them altogether and integrating regular checks at the end of each inning to make sure pitchers are not using the materials. The MLB provides access to their StatCast data which is collected through several tracking cameras dispersed throughout the field. This data comprises of relevant statistics such as spin rate in addition to batting statistics which can show the overall trends over time. 
 
-I am thinking to do a project on the "Sticky Stuff" scandal in Major League Baseball in 2021. The scandal involved Major League Baseball pitchers using sticky substances on their hands, to increase spin rate adn decrease pitch speed, increasing their strike outs and making it harder for the batter to hit the ball. Ultimeatley I would like to create a shiny app to look at how the sticky stuff scandal impacted the MLB financially, this could be found by looking at attendance and tv viewership. I also think it could be interesting to see how the scandal impacted batting statistics.
+# Introduction
+
+For the project I am interested in investigating the impact of the sticky stuff scandal on baseball as a whole. I will do so by creating a Shiny App using the StatCast data as well as some attendance and TV viewership data I found online. In looking at the attendance data I am curious to see if there is a noticeable pattern between the trend in attendance and the trends in spin rate. More specifically, I would like to see if attendance increased after the MLB cracked down on sticky substances. My theory is that I will see an increase in attendance following 2021, as generally speaking attendance is higher when the amount of home runs is higher. Take for example, the steroid era in the early 2000s, home runs were at an all time high because so many players were taking steroids, and attendance was extremely high as well. This leads me to believe that something like the sticky stuff scandal would have the opposite effect and harm attendance. I also think a brief glance at some world series tv viewership data I found will be relevant to this same idea. Although in this situation the sample size is smaller, I still think that a trend in world series viewership reflects on the viewership and popularity of baseball in that season as a whole. I would also like to see just how evident the impact of spin rate on batting statistics such as home runs, batting average, and slugging average are. Similarly, I want to see how spin rate impacted other pitching statistics, such as strike out percentage and the number of players hit by pitch. On a simple note, I would like to take a glance at pitching how spin rate has changed over time just to see how evident the direct influence of the sticky stuff scandal is. 
 
 # Pitching dataset description
 
@@ -135,56 +137,11 @@ attendancefull <- full_join(attendance2018_2021, attendance2022_2024)
 write_csv(attendancefull, "attendancefull.csv")
 ```
 
-# Cleaning and tidying data
+# Cleaning and tidying the pitching data
 
 ```{r}
 pitching_df <- pitching_df |> rename(pitcher = `last_name, first_name`)
 ```
-
-```{r}
-pitch_speeds_long <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "pitch_type", values_to =  "pitch_speed") |> relocate(pitch_speed, pitch_type) 
-
-pitch_spin_long <- pitching_df |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "pitch_type", values_to =  "spin_rate") |> relocate(spin_rate, pitch_type) 
-```
-
-```{r}
-# join the two new datasets
-full_pitch <- bind_rows(pitch_speeds_long, pitch_spin_long)
-```
-
-# Reproducible example to try and solve the code
-
-```{r}
-example <- pitching_df |> slice(1:2) |> select(c(10:17, 1)) |> as_tibble()
-example_new <- example |> pivot_longer(1:8, names_to = "temp", values_to = "speed_spin") |>
-  separate(temp, into = c("type", "drop", "spin_type")) |>
-  select(-drop) |>
-  unite(new_val, c("type", "spin_type"))
-```
-
-```{r}
-example_new |> pivot_wider(names_from = "new_val", values_from = "speed_spin")
-```
-
-```{r}
-example_speeds <- example |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "pitch_type", values_to =  "pitch_speed") |> relocate(pitch_speed, pitch_type) 
-
-example_spin <- example |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "pitch_type", values_to =  "spin_rate") |> relocate(spin_rate, pitch_type)
-```
-
-```{r}
-bind_rows(example_speeds, example_spin)
-```
-
-```{r}
-example_long <-example |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |> relocate(spin_rate, pitch_speed, speedpitch_type, spinpitch_type)
-```
-
-```{r}
-examples_final <- example_long |> separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
-```
-
-# Apply what I solved from the example to the real dataset
 
 ```{r}
 pitching_cleaner <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin))) 
@@ -206,92 +163,26 @@ Same deal here with the tv viewership
 tv_views_smaller <- worldseriesviewing |> select(!c(winning_team, losing_team, losing_team_wins)) |> filter(year >= 2018 & year <= 2023)
 ```
 
-```{r}
-pitching_attendance <- left_join(pitching_cleaner, attendance_smaller)
-```
+# Making two small separate dataframes for pitch speed and spin rate
 
 ```{r}
-pitching_tv_attendance <- left_join(pitching_attendance, tv_views_smaller)
+pitchspeed <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "pitch_type", values_to =  "pitch_speed") |> select(!c(sl_avg_spin, ch_avg_spin, cu_avg_spin, si_avg_spin))
+
+pitchspin <- pitching_df |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "pitch_type", values_to =  "spin_rate")|> select(!c(sl_avg_speed, ch_avg_speed, cu_avg_speed, si_avg_speed)) 
 ```
+
+# More data cleaning
 
 ```{r}
-pitching_cleaner |> group_by(year, pitch_type, pitch_speed, spin_rate) |> summarise()
+speed_new <- pitchspeed |> mutate(pitch_type = str_remove(pitch_type, "_avg_speed"))
+
+speed_pitch <- speed_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker"))
+spin_new <- pitchspin |> mutate(pitch_type = str_remove(pitch_type, "_avg_spin")) |> relocate(pitch_type)
+
+spin_pitch <- spin_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) 
 ```
 
-```{r}
-pitching_cleaner |> group_by(year, pitch_speed, spin_rate) |> summarise(mean_spin = mean(spin_rate), mean_speed = mean(pitch_speed))
-```
-
-# Trying to work on brainstorming static visualization for tidy app
-
-```{r}
-ggplot(data = small_clean_pitching, aes(y = spin_rate, x = pitch_speed, colour = pitch_type)) + geom_point()
-```
-
-```{r}
-ggplot(data = pitching_cleaner, aes(x= year, y = spin_rate)) + geom_point()
-```
-
-The visualizations are not looking great so I need to revisit how to clean the data
-
-```{r}
-pitch_speed <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitchspeed") 
-
-pitch_spin <- pitching_df |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spinrate")
-
-binded <- bind_rows(pitch_speed, pitch_spin)
-
-
-full_pitching <- binded |> separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
-```
-
-```{r}
-# may need to slice data since it is pretty big
-small_pitching <- pitching_df |> arrange(desc(pa)) |> slice(1:200)
-
-small_clean_pitching <- small_pitching |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin)))
-```
-
-```{r}
-pitching_cleaner |> group_by(year) |> summarise(pitch_speed_avg = mean(pitch_speed))
-```
-
-```{r}
-ggplot(data = full_pitching, aes(y = spinrate, x = pitchspeed, colour = pitch_type)) + geom_point()
-```
-
-```{r}
-ggplot(data = pitching_tv_attendance, aes(x = Attendance, y = spin_rate)) + geom_point()
-```
-
-```{r}
-ggplot(data = pitching_df, aes(x = home_run, y = sl_avg_spin)) + geom_point()
-```
-
-```{r}
-attendance_tv <- left_join(attendance_smaller, tv_views_smaller)
-attendance_tv <- attendance_tv |> mutate(small_attendance = Attendance/1000, small_audience = average_audience/1000)
-```
-
-```{r}
-complete <- left_join(pitching_cleaner, attendance_tv)
-```
-
-```{r}
-ggplot(attendance_tv, aes(x = small_attendance, y = small_audience)) + geom_point()
-```
-
-```{r}
-ggplot(data = complete, aes(y = spin_rate, x = Attendance/10000)) + geom_col()
-```
-
-# For now I am deciding that since the main issue is the attendance dataset I am going to try and make the shiny app just for the pitching data and then go back to the attendance stuff
-
-For now this is the static graph I will use but I will change it to something more complicated, I just want to see how this will work
-
-```{r}
-ggplot(data = pitching_cleaner, aes(x= home_run, y = spin_rate, colour = pitch_type)) + geom_point()
-```
+# Static visualizations for the tidy app with pitch speed and spin rate separate
 
 ```{r}
 attendance_tv_reorder <- attendance_tv |> mutate(Tm = fct_reorder(Tm, `Attend/G`))
@@ -307,39 +198,14 @@ ggplot(data = attendance_tv, aes(x = year, y = average_audience)) + geom_col()
 ```
 
 ```{r}
-ggplot(pitchspeed, aes(x = pitch_speed)) + geom_histogram() + facet_wrap(~year)
+ggplot(speed_pitch, aes(x = pitch_speed)) + geom_histogram() + facet_wrap(~year)
 ```
 
 ```{r}
-ggplot(pitchspin, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year)
+ggplot(spin_pitch, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year)
 ```
 
-```{r}
-pitchspeed <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "pitch_type", values_to =  "pitch_speed") |> select(!c(sl_avg_spin, ch_avg_spin, cu_avg_spin, si_avg_spin))
-
-pitchspin <- pitching_df |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "pitch_type", values_to =  "spin_rate")|> select(!c(sl_avg_speed, ch_avg_speed, cu_avg_speed, si_avg_speed)) 
-```
-
-```{r}
-slice_speed <- pitchspeed |> arrange(desc(pa)) |> slice(1:20)
-```
-
-```{r}
-slice_spin <- pitchspin |> arrange(desc(pa)) |> slice(1:20)
-```
-
-```{r}
-slice_attendance <- attendance_tv |> arrange(desc(Attendance)) |> slice(1:30)
-```
-
-```{r}
-speed_new <- pitchspeed |> mutate(pitch_type = str_remove(pitch_type, "_avg_speed"))
-
-speed_pitch <- speed_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker"))
-spin_new <- pitchspin |> mutate(pitch_type = str_remove(pitch_type, "_avg_spin")) |> relocate(pitch_type)
-
-spin_pitch <- spin_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) 
-```
+#Shiny App with pitch speed and spin rate separate
 
 ```{r}
 library(shiny)
@@ -417,13 +283,19 @@ output$attendance_raw_data <- renderDataTable({attendance_tv})
 shinyApp(ui, server)
 ```
 
-# Plotly
+# Static visualizations and plotly for the shiny app with spin rate and pitch speed together
 
 ```{r}
-scatter <- ggplot(pitching_cleaner, aes(x= pitch_speed, y = spin_rate, colour = pitch_type, label = year)) + geom_point(alpha = 0.2) + theme_minimal() + labs(title = "Plotly scatterplot of spin_rate against pitch speed in which the year of each pitch is hown when hovering over")
+ggplot(data = pitching_cleaner, aes(x= spin_rate, y = home_run, colour = pitch_type)) + geom_point()
+```
+
+```{r}
+scatter <- ggplot(pitching_cleaner, aes(x= spin_rate, y = pitch_speed, colour = pitch_type, label = year)) + geom_point(alpha = 0.2) + theme_minimal() + labs(title = "Plotly scatterplot of spin_rate against pitch speed in which the year of each pitch is hown when hovering over")
 
 ggplotly(scatter, tooltip = "year")
 ```
+
+# Shiny app with pitch speed and spin rate together
 
 ```{r}
 library(shiny)
@@ -447,8 +319,9 @@ ui <- fluidPage(
     ),
     mainPanel(
       tabsetPanel(
-        tabPanel("Fluid Data", plotOutput("scatterplot"), plotOutput("barplot")),
-        tabPanel("Static Data", plotlyOutput("interscatter"), plotOutput("attendance_line"), plotOutput("audience_bar"))
+        tabPanel("Fluid Data", plotOutput("scatterplot"),  plotlyOutput("interscatter"), plotOutput("barplot")),
+        tabPanel("Static Data", plotOutput("attendance_line"), plotOutput("audience_bar")),
+        tabPanel("Datasets", dataTableOutput("attendance_raw_data"), dataTableOutput("pitching_raw_data"))
       )
     )
   )
@@ -468,9 +341,13 @@ output$barplot <- renderPlot({ggplot(attendance_reactive(), aes(x = Tm, y = .dat
 
 output$attendance_line <- renderPlot({ggplot(attendance_tv, aes(x = year, y = `Attend/G`, colour = Tm)) + geom_line() + theme_minimal() + labs(title = "Average Attendance per Game Over Time ") })
 
-output$audience_bar <- renderPlot({ggplot(data = attendance_tv, aes(x = year, y = average_audience)) + geom_col() + theme_minimal() + labs(title = "Average TV Audience per World Series Game In Each Year ") })
+output$audience_bar <- renderPlot({ggplot(data = tv_views_smaller, aes(x = year, y = average_audience)) + geom_col() + theme_minimal() + labs(title = "Average TV Audience per World Series Game In Each Year ") })
 
 output$interscatter <- renderPlotly({ggplotly(scatter, tooltip = "year")})
+
+output$attendance_raw_data <- renderDataTable({attendance_tv})
+
+output$pitching_raw_data <- renderDataTable({pitching_cleaner})
 }
 
 shinyApp(ui, server)
