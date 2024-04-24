@@ -189,7 +189,7 @@ examples_final <- example_long |> separate(speedpitch_type, into = c("pitchtype"
 ```{r}
 pitching_cleaner <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin))) 
 
-pitching_cleaner <- pitching_cleaner |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) |> relocate(pitch_type)
+pitching_cleaner <- pitching_cleaner |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) 
 ```
 
 # Cleaning up attendance and tv viewership dataframes
@@ -203,7 +203,7 @@ attendance_smaller <- attendancefull |> select(Tm, Attendance, `Attend/G`, Time,
 Same deal here with the tv viewership
 
 ```{r}
-tv_views_smaller <- worldseriesviewing |> select(!c(winning_team, losing_team, losing_team_wins))
+tv_views_smaller <- worldseriesviewing |> select(!c(winning_team, losing_team, losing_team_wins)) |> filter(year >= 2018 & year <= 2023)
 ```
 
 ```{r}
@@ -333,23 +333,22 @@ slice_attendance <- attendance_tv |> arrange(desc(Attendance)) |> slice(1:30)
 ```
 
 ```{r}
-speed_new <- pitchspeed |> mutate(pitch_type = str_remove(pitch_type, "_avg_speed")) |> relocate(pitch_type)
+speed_new <- pitchspeed |> mutate(pitch_type = str_remove(pitch_type, "_avg_speed"))
 
-speed_pitch <- speed_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) |> relocate(pitch_type)
-
+speed_pitch <- speed_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker"))
 spin_new <- pitchspin |> mutate(pitch_type = str_remove(pitch_type, "_avg_spin")) |> relocate(pitch_type)
 
-spin_pitch <- spin_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) |> relocate(pitch_type)
+spin_pitch <- spin_new |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) 
 ```
 
 ```{r}
 library(shiny)
-year_speed <- pitchspeed |> distinct(year) |> pull(year)
-year_spin <- pitchspeed |> distinct(year) |> pull(year)
-speed_y_var_choices <- names(pitchspeed)[c(5:10)]
-spin_y_var_choices <- names(pitchspin)[c(5:10)]
-speed_pitch_choice <- pitchspeed |> distinct(pitch_type) |> pull(pitch_type)
-spin_pitch_choice <- pitchspin |> distinct(pitch_type) |> pull(pitch_type)
+year_speed <- spin_pitch |> distinct(year) |> pull(year)
+year_spin <- speed_pitch |> distinct(year) |> pull(year)
+speed_y_var_choices <- names(spin_pitch)[c(6:11)]
+spin_y_var_choices <- names(speed_pitch)[c(6:11)]
+speed_pitch_choice <- speed_pitch |> distinct(pitch_type) |> pull(pitch_type)
+spin_pitch_choice <- spin_pitch |> distinct(pitch_type) |> pull(pitch_type)
 x_var <- names(attendance_tv)[c(2, 3, 8)]
 year_choices_attendance <- attendance_tv|> distinct(year) |> pull(year)
 ui <- fluidPage(
@@ -357,12 +356,12 @@ ui <- fluidPage(
     sidebarPanel(
       radioButtons("speed_year_sel", label = "Choose a year for pitch speed:", choices = year_speed),
       selectizeInput("speed_pitch_sel", label = "Choose a pitch type for pitch speed:",
-                     choices = pitchspeed$pitch_type, selected = "sl_avg_speed",
+                     choices = speed_pitch$pitch_type, selected = "slider",
                      multiple = TRUE),
       selectInput("speed_y_var_sel", label = "Choose a y-variable for pitching speed:", choices = speed_y_var_choices),
       radioButtons("spin_year_sel", label = "Choose a year for spin rate:", choices = year_spin),
       selectizeInput("spin_pitch_sel", label = "Choose a pitch type for spin rate:",
-                     choices = pitchspin$pitch_type, selected = "sl_avg_spin",
+                     choices = spin_pitch$pitch_type, selected = "slider",
                      multiple = TRUE),
       selectInput("spin_y_var_sel", label = "Choose a y-variable for pitching speed:", choices = spin_y_var_choices),
       radioButtons("x_sel", label = "Choose an attendance variable:", choices = y_var),
@@ -371,8 +370,9 @@ ui <- fluidPage(
     ),
     mainPanel(
       tabsetPanel(
-        tabPanel("Fluid Data", plotOutput("scatterplot_speed"), plotOutput("scatterplot_spin"), plotOutput("barplot")),
-        tabPanel("Static Data", plotOutput("attendance_line"), plotOutput("audience_bar"), plotOutput("speedhist"), plotOutput("spinhist")), tabPanel("Data Tables", dataTableOutput("speed_raw_data"), dataTableOutput("spin_raw_data"), dataTableOutput("attendance_raw_data"))
+        tabPanel("Pitch Speed", plotOutput("scatterplot_speed"), plotOutput("speedhist"),  dataTableOutput("speed_raw_data")),
+        tabPanel("Spin Rate",  plotOutput("scatterplot_spin"), plotOutput("spinhist"), dataTableOutput("spin_raw_data")),
+        tabPanel("Attendance", plotOutput("barplot"), plotOutput("attendance_line"), plotOutput("audience_bar"), dataTableOutput("attendance_raw_data"))
       )
     )
   )
@@ -382,10 +382,10 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
  speed_pitching_reactive <- reactive({
-   speed1 <- pitchspeed |> filter(year == input$speed_year_sel) |> filter(pitch_type %in% input$speed_pitch_sel)
+   speed1 <- speed_pitch |> filter(year == input$speed_year_sel) |> filter(pitch_type %in% input$speed_pitch_sel)
 })
  spin_pitching_reactive <- reactive({
-   spin1 <- pitchspin |> filter(year == input$spin_year_sel) |> filter(pitch_type %in% input$spin_pitch_sel)
+   spin1 <- spin_pitch |> filter(year == input$spin_year_sel) |> filter(pitch_type %in% input$spin_pitch_sel)
 })
  attendancereactive <- reactive({
    team1 <- attendance_tv |> filter(Tm %in% input$tm_sel)
@@ -402,7 +402,7 @@ output$barplot <- renderPlot({ggplot(attendance_reactive(), aes(x = Tm, y = .dat
 
 output$attendance_line <- renderPlot({ggplot(attendancereactive(), aes(x = year, y = `Attend/G`, colour = Tm)) + geom_line() + theme_minimal() + labs(title = "Average Attendance per Game Over Time ") })
 
-output$audience_bar <- renderPlot({ggplot(data = attendance_tv, aes(x = year, y = average_audience)) + geom_col() + theme_minimal() + labs(title = "Average TV Audience per World Series Game In Each Year ") })
+output$audience_bar <- renderPlot({ggplot(data = tv_views_smaller, aes(x = year, y = average_audience)) + geom_col() + theme_minimal() + labs(title = "Average TV Audience per World Series Game In Each Year ") })
 
 output$speedhist <- renderPlot({ggplot(data = pitchspeed, aes(x = pitch_speed)) + geom_histogram() + facet_wrap(~year) + theme_minimal() + labs(title = "Histogram of pitch speed faceted by year")})
 
@@ -438,7 +438,7 @@ ui <- fluidPage(
     sidebarPanel(
       radioButtons("year_sel", label = "Choose a year for pitching:", choices = year_choices_pitching),
       selectizeInput("pitch_sel", label = "Choose pitch type:",
-                     choices = pitching_cleaner$pitch_type, selected = "ch",
+                     choices = pitching_cleaner$pitch_type, selected = "slider",
                      multiple = TRUE),
       radioButtons("x_var_sel", label = "Choose an x-variable for pitching:", choices = x_var_choices),
       selectInput("y_var_sel", label = "Choose a y-variable for pitching:", choices = y_var_choices),
