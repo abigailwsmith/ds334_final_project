@@ -1,0 +1,80 @@
+---
+title: "MLB's Sticky Stuff Scandal"
+author: "Abigail Smith"
+format: revealjs
+---
+
+```{r message=FALSE, warning=FALSE, echo = FALSE}
+library(here)
+library(readr)
+library(tidyverse)
+library(plotly)
+
+# Reading in the pitching data set
+pitching_df <- read_csv(here("data/pitchingstats.csv"))
+
+# Reading in each individual attendance data set
+attendancefull <- read_csv(here("data/attendancefull.csv"))
+
+# Reading in the world series data set
+worldseriesviewing <- read_csv(here("data/world-series-ratings.csv"))
+
+# Cleaning pitching
+pitching_df <- pitching_df |> rename(pitcher = `last_name, first_name`)
+
+pitching_cleaner <- pitching_df |> pivot_longer(c("sl_avg_speed", "ch_avg_speed", "cu_avg_speed", "si_avg_speed"), names_to = "speedpitch_type", values_to =  "pitch_speed") |> pivot_longer(c("sl_avg_spin", "ch_avg_spin", "cu_avg_spin", "si_avg_spin"), names_to = "spinpitch_type", values_to =  "spin_rate") |>separate(speedpitch_type, into = c("pitchtype", "speed"), sep = "_avg_") |> separate(spinpitch_type, into = c("pitch_type", "spin"), sep = "_avg_") |> select(!(c(pitchtype, speed, spin))) 
+
+pitching_cleaner <- pitching_cleaner |> mutate(pitch_type = case_when(pitch_type == "sl" ~ "slider", pitch_type == "ch" ~ "changeup", pitch_type == "cu" ~ "curveball", pitch_type == "si" ~ "sinker")) 
+
+# Cleaning up attendance and tv viewership dfs
+attendance_smaller <- attendancefull |> select(Tm, Attendance, `Attend/G`, Time, `Est. Payroll`, year)
+
+tv_views_smaller <- worldseriesviewing |> select(c(year, average_audience)) |> filter(year >= 2018 & year <= 2023)
+```
+
+## Pitching Data
+
+-   pitching_cleaner
+    -   2018-2024
+    -   768 pitchers
+    -   6 dependent variables (HR, K%, BB%, HBP, xBA, xSLG)
+    -   2 independent variables (spin rate and pitch type (curveball, changeup, slider, sinker))
+    
+# Attendance 
+-   attendance_smaller
+    -   2018-2024
+    -   30 teams
+    -   3 variables (attendance, attendance per game, year)
+
+# TV Viewership Data 
+-   tv_views_smaller
+    -   2018-2022
+    -   1 variable (network)
+
+## Question of interest
+
+Using spin rate to inspect how big of an effect did the sticky stuff scandal had on baseball as a whole.
+
+## Pitching scatterplot
+
+```{r}
+ggplot(data = pitching_cleaner, aes(x= spin_rate, y = home_run, colour = pitch_type)) + geom_point() + theme_minimal() + facet_wrap(~year) + labs(title ="faceted scatterplot of spinrate against home runs")
+```
+
+# Pitching histogram
+
+```{r}
+ggplot(data = pitching_cleaner, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year) + theme_minimal() + labs(title = "Histogram of spin rate facted by year")
+```
+
+## Attendance lineplot
+
+```{r}
+ggplot(data = attendance_smaller, aes(x = year, y = `Attend/G`, colour = Tm)) + geom_line() + theme_minimal() + labs(title = "Average Attendance per Game Over Time ")
+```
+
+# TV viewership barplot
+
+```{r}
+ggplot(data = tv_views_smaller, aes(x = year, y = average_audience)) + geom_col() + theme_minimal() + labs(title = "Average TV Audience per World Series Game In Each Year ")
+```

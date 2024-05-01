@@ -164,9 +164,9 @@ ggplot(data = pitching_cleaner, aes(x = spin_rate)) + geom_histogram() + facet_w
 ```{r}
 library(shiny)
 year_choices_pitching <- pitching_cleaner |> distinct(year) |> pull(year)
-y_var_choices <- names(pitching_cleaner)[c(5:10)]
+y_var_choices <- names(pitching_cleaner)[c(3:8)]
 pitch_choice <- pitching_cleaner |> distinct(pitch_type) |> pull(pitch_type)
-x_var <- names(attendance_smaller)[c(2, 3, 8)]
+x_var <- names(attendance_smaller)[c(2, 3)]
 year_choices_attendance <- attendance_smaller|> distinct(year) |> pull(year)
 ui <- fluidPage(
   sidebarLayout(
@@ -176,9 +176,9 @@ ui <- fluidPage(
                      choices = pitching_cleaner$pitch_type, selected = "slider",
                      multiple = TRUE),
       selectInput("y_var_sel", label = "Choose a y-variable for pitching:", choices = y_var_choices),
-      radioButtons("x_sel", label = "Choose an attendance variable:", choices = y_var),
+      radioButtons("x_sel", label = "Choose an attendance variable:", choices = x_var),
       radioButtons("year_sel_attendance", label = "Choose a year for the attendance:", choices = year_choices_pitching),
-      selectizeInput("tm_sel", label = "Choose a team:", choices = attendance_tv$Tm, selected = "Arizona Diamondbacks", multiple = TRUE)
+      selectizeInput("tm_sel", label = "Choose a team:", choices = attendance_smaller$Tm, selected = "Arizona Diamondbacks", multiple = TRUE)
     ),
     mainPanel(
       tabsetPanel(
@@ -196,16 +196,18 @@ server <- function(input, output, session) {
  pitching_reactive <- reactive({
    pitching1 <- pitching_cleaner |> filter(year == input$year_sel) |> filter(pitch_type %in% input$pitch_sel)
 })
+ 
 output$scatterplot <- renderPlot({ggplot(pitching_reactive(), aes(x= spin_rate, y = .data[[input$y_var_sel]], colour = pitch_type)) + geom_point() + theme_minimal() + labs(title = glue::glue("Scatterplot of spin rate against",  input$y_var_sel, " in ", input$year_sel))})
 
 
-output$spinhist <- renderPlot({ggplot(data = pitchspin, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year) + theme_minimal() + labs(title = "Histogram of spin rate facted by year")})
+output$spinhist <- renderPlot({ggplot(data = pitching_cleaner, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year) + theme_minimal() + labs(title = "Histogram of spin rate facted by year")})
 
   attendance_reactive <- reactive({
-    attendance1 <- attendance_tv|> filter(year == input$year_sel_attendance) |>  mutate(Tm = fct_reorder(Tm, .data[[input$x_sel]]))
+    attendance1 <- attendance_smaller |> filter(year == input$year_sel_attendance) |>  mutate(Tm = fct_reorder(Tm, .data[[input$x_sel]]))
   })
+  
    attendancereactive <- reactive({
-   team1 <- attendance_tv |> filter(Tm %in% input$tm_sel)})
+   team1 <- attendance_smaller |> filter(Tm %in% input$tm_sel)})
 output$barplot <- renderPlot({ggplot(attendance_reactive(), aes(x = Tm, y = .data[[input$x_sel]])) + geom_col() + coord_flip() + theme_minimal() + labs(title = glue::glue("Barplot of ", input$x_sel, " in ", input$year_sel_attendance)) })
 
 output$attendance_line <- renderPlot({ggplot(attendancereactive(), aes(x = year, y = `Attend/G`, colour = Tm)) + geom_line() + theme_minimal() + labs(title = "Average Attendance per Game Over Time ") })
