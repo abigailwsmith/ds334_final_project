@@ -136,8 +136,6 @@ tv_views_smaller <- worldseriesviewing |> select(c(year, average_audience)) |> f
 
 # Static visualizations for the shiny app
 
-\*\*\* maybe add a regression line to each scatter plot that changes when the variable does \*\*\*
-
 ```{r}
 attendance_smaller_reorder <- attendance_smaller |> mutate(Tm = fct_reorder(Tm, `Attend/G`))
 ggplot(data = attendance_smaller_reorder, aes(x = Tm, y = `Attend/G`)) + geom_col() + coord_flip() + theme_minimal()
@@ -175,7 +173,7 @@ ui <- fluidPage(
       selectizeInput("pitch_sel", label = "Choose pitch type:",
                      choices = pitching_cleaner$pitch_type, selected = "slider",
                      multiple = TRUE),
-      selectInput("y_var_sel", label = "Choose a y-variable for pitching:", choices = y_var_choices),
+      selectInput("y_var_sel", label = "Choose a response variable for pitching:", choices = y_var_choices),
       radioButtons("x_sel", label = "Choose an attendance variable:", choices = x_var),
       radioButtons("year_sel_attendance", label = "Choose a year for the attendance:", choices = year_choices_pitching),
       selectizeInput("tm_sel", label = "Choose a team:", choices = attendance_smaller$Tm, selected = "Arizona Diamondbacks", multiple = TRUE)
@@ -224,3 +222,15 @@ output$pitching_raw_data <- renderDataTable({pitching_cleaner})
 
 shinyApp(ui, server)
 ```
+
+# Findings
+
+When playing around with the app, I found that there is some pretty clear difference in the hitting statistics before 2021 as opposed to after. Things like strike out percentage were higher prior to 2021 as opposed to things like opposing home runs which went up after 2021. The impact of the sticky substances is most evident in the faceted histogram of spin rate, it is quite clear that the spin rate was higher previous to 2021. In the attendance graphs as well, there is a considerable increase in both the average and total attendance following 2021. This change is somewhat less evident in the TV viewership bar plot however. What is most evident in all graphs is the 2020 season, this is especially interesting in the line graph which shows a gap during the 2020 season which is because attendance was not allowed during the COVID-19 pandemic. Additionally, the 2020 season was shortened so all statistics for that season will be offset. Another season in the data set that will be strange is the 2024 season since that one had only just begun at the time of me making the app. 
+
+# Conclusion
+
+If I had more time, I would have liked to add more of a modelling aspect either to the app itself or just to the project in general. It could have been interesting to assess how well spin rate predicts each of the response variables. With modelling, I could have made reactive models with liens on the scatter plot, which could have made the visualization easier to interpret. I also think looking at the correlation between spin rate and each of the response variables could have provided additional statistical information of interest.
+
+One of the main limitations I had in making my app was that I wanted to use both the spin rate and pitch speed but I had trouble pivoting the data so that it will work. After awhile of struggling to work with the data with the pitch speed, I decided against keeping it since I realized that pitch speed is actually a dependent variable when it comes to spin rate and thus was not crucial to include it in the visualization. Another issue I had was that I could not find a data set with the MLB TV viewership data for the entire season, just the World Series. While the World Series data is still interesting, I feel that it would have been better to have a bigger TV viewership data set. Additionally, I had hoped to combine the TV and attendance data sets into one so that the comparisons could be made more clear, but due to the way they were set up this did not work. That being said, I feel that i was able to accommodate to these difficulties relatively well in an organized manner. 
+
+
