@@ -59,10 +59,10 @@ attendance_smaller <- attendancefull |> select(Tm, Attendance, `Attend/G`, year)
 tv_views_smaller <- worldseriesviewing |> select(c(year, average_audience)) |> filter(year >= 2018 & year <= 2023)
 ```
 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
+```{r}
 ggplot(data = attendance_smaller, aes(x = year, y = `Attend/G`, colour = Tm)) + geom_line()
 ```
 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
+```{r}
 ggplot(data = pitching_cleaner, aes(x = spin_rate)) + geom_histogram() + facet_wrap(~year) + theme_minimal() + labs(title = "Histogram of spin rate facted by year")
 ```
