@@ -54,7 +54,6 @@ As a tentative tv viewership dataset I found is this one from [kaggle](https://w
 library(here)
 library(readr)
 library(tidyverse)
-library(plotly)
 ```
 
 # Data
