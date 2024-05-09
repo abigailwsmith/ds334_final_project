@@ -94,20 +94,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="abstractbrainstorm" class="level1">
-<h1>Abstract/Brainstorm</h1>
-<ul>
-<li>still very much so a work in progress, more of a brainstorm than an abstract *</li>
-</ul>
-<p>I am thinking to do a project on the “Sticky Stuff” scandal in Major League Baseball in 2021. The scandal involved Major League Baseball pitchers using sticky substances on their hands, to increase spin rate adn decrease pitch speed, increasing their strike outs and making it harder for the batter to hit the ball. Ultimeatley I would like to create a shiny app to look at how the sticky stuff scandal impacted the MLB financially, this could be found by looking at attendance and tv viewership. I also think it could be interesting to see how the scandal impacted batting statistics.</p>
+<section id="abstract" class="level1">
+<h1>Abstract</h1>
+<p>My project is focused on the “Sticky Stuff” scandal in Major League Baseball (MLB) in 2021. The scandal involved MLB pitchers using sticky substances on their hands to increase their spin rate and decrease pitch speed. While pitchers have always used simple substances such as sunscreen and rosin to gain grip, pitchers were now using materials such as Spider Tack an extremely high stick glue like substance to gain grip. Furthermore, some teams had even begun hiring chemists to develop specific substances of extreme strength. Pitchers would hide this material on their glove or hat and then rub it on their hands to gain grip. The higher spin rates resulted in an increase in strike outs as it is harder for the batter to hit the ball when it has so much movement. Additionally, more batters were getting hit since pitchers had less control and the amount of home runs hit went down dramatically since again the ball grew harder to hit. These excessive changes in hitting patterns led to the MLB leading a major cut down on the substances, banning them altogether and integrating regular checks at the end of each inning to make sure pitchers are not using the materials. The MLB provides access to their StatCast data which is collected through several tracking cameras dispersed throughout the field. This data comprises of relevant statistics such as spin rate in addition to batting statistics which can show the overall trends over time.</p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>For the project I am interested in investigating the impact of the sticky stuff scandal on baseball as a whole. I will do so by creating a Shiny App using the StatCast data as well as some attendance and TV viewership data I found online. In looking at the attendance data I am curious to see if there is a noticeable pattern between the trend in attendance and the trends in spin rate. More specifically, I would like to see if attendance increased after the MLB cracked down on sticky substances. My theory is that I will see an increase in attendance following 2021, as generally speaking attendance is higher when the amount of home runs is higher. Take for example, the steroid era in the early 2000s, home runs were at an all time high because so many players were taking steroids, and attendance was extremely high as well. This leads me to believe that something like the sticky stuff scandal would have the opposite effect and harm attendance. I also think a brief glance at some world series tv viewership data I found will be relevant to this same idea. Although in this situation the sample size is smaller, I still think that a trend in world series viewership reflects on the viewership and popularity of baseball in that season as a whole. I would also like to see just how evident the impact of spin rate on batting statistics such as home runs, batting average, and slugging average are. Similarly, I want to see how spin rate impacted other pitching statistics, such as strike out percentage and the number of players hit by pitch. On a simple note, I would like to take a glance at pitching how spin rate has changed over time just to see how evident the direct influence of the sticky stuff scandal is.</p>
 </section>
 <section id="pitching-dataset-description" class="level1">
 <h1>Pitching dataset description</h1>
 <p>The initial data set that I read in is from MLB’s Statcast Feature, it is accessible on the <a href="https://baseballsavant.mlb.com/leaderboard/custom?year=2024%2C2023%2C2022%2C2021%2C2020%2C2019%2C2018&amp;type=pitcher&amp;filter=&amp;min=q&amp;selections=pa%2Chome_run%2Ck_percent%2Cbb_percent%2Cxba%2Cxslg%2Csl_avg_speed%2Csl_avg_spin%2Cch_avg_speed%2Cch_avg_spin%2Ccu_avg_speed%2Ccu_avg_spin%2Csi_avg_speed%2Csi_avg_spin&amp;chart=false&amp;x=pa&amp;y=pa&amp;r=no&amp;chartType=beeswarm&amp;sort=pa&amp;sortDir=desc">Baseball Savant website</a>. I adjusted the data frame to include pitching statistics for individual pitchers in the years 2018-2024 for the whole MLB. The below table describes each of the variables in the data set.</p>
 <table class="table">
 <colgroup>
-<col style="width: 26%">
-<col style="width: 73%">
+<col style="width: 22%">
+<col style="width: 77%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -117,20 +118,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>last_name, first_name</code></td>
+<td><code>pitcher</code></td>
 <td>The last and first name of the player.</td>
 </tr>
 <tr class="even">
-<td><code>player_id</code></td>
-<td>An identifying number for each player</td>
-</tr>
-<tr class="odd">
 <td><code>year</code></td>
 <td>The year for the case.</td>
-</tr>
-<tr class="even">
-<td><code>pa</code></td>
-<td>Stands for players against, meaning its the number of batters that pitcher faced in the season.</td>
 </tr>
 <tr class="odd">
 <td><code>home_run</code></td>
@@ -157,32 +150,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Opposing players’ slugging average against the pitcher in that season.</td>
 </tr>
 <tr class="odd">
-<td><code>sl_avg_speed</code></td>
-<td>The average speed of sliders for that pitcher in that season.</td>
+<td><code>spin_rate</code></td>
+<td>The spin rate for each individual pitch, measured in rotations per minute.</td>
 </tr>
 <tr class="even">
-<td><code>sl_avg_spin</code></td>
-<td>The average spin rate of sliders for that pitcher in that season.</td>
-</tr>
-<tr class="odd">
-<td><code>ch_avg_speed</code></td>
-<td>The average speed of changeups for that pitcher in that season.</td>
-</tr>
-<tr class="even">
-<td><code>ch_avg_spin</code></td>
-<td>The average spin rate of changeups for that pitcher in that season.</td>
-</tr>
-<tr class="odd">
-<td><code>cu_avg_speed</code></td>
-<td>The average speed of cutters for that pitcher in that season.</td>
-</tr>
-<tr class="even">
-<td><code>cu_avg_spin</code></td>
-<td>The average spin rate of cutters for that pitcher in that season.</td>
-</tr>
-<tr class="odd">
-<td><code>si_avg_speed</code></td>
-<td>The average speed of sinkers for that pitcher in that season.</td>
+<td><code>pitch_type</code></td>
+<td>The type of pitch each pitch is, which could be (curveball, sinker, slider, and changeup)</td>
 </tr>
 </tbody>
 </table>
@@ -191,10 +164,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Attendance datasets descriptions</h1>
 <p>Additionally, I used <a href="https://www.baseball-reference.com/leagues/majors/2024-misc.shtml">basbeall-reference</a> for data on baseball attendance, in the years 2018-2024. For this data, it was all in individual data sets which I had to join together into one big one. In each dataset the variables are the same which I created a table for.</p>
 <table class="table">
-<colgroup>
-<col style="width: 26%">
-<col style="width: 73%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Variable</th>
@@ -215,56 +184,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Average attendance per home game that season.</td>
 </tr>
 <tr class="even">
-<td><code>BatAge</code></td>
-<td>Batter’s average age in that season.</td>
-</tr>
-<tr class="odd">
-<td><code>PAge</code></td>
-<td>Pitcher’s average age in that season.</td>
-</tr>
-<tr class="even">
-<td><code>BPF</code></td>
-<td>Batting park factor, a scale used to measure if a ballpark favors batters (&gt;100) or pitchers (&lt;100).</td>
-</tr>
-<tr class="odd">
-<td><code>PPF</code></td>
-<td>Pitching park factor, a scale used to measure if a ballpark favors batters (&gt;100) or pitchers (&lt;100).</td>
-</tr>
-<tr class="even">
-<td><code>#HOF</code></td>
-<td>The number of players currently in hall of fame on that team in that season.</td>
-</tr>
-<tr class="odd">
-<td><code>#A-S</code></td>
-<td>The number of allstars on that team in that season.</td>
-</tr>
-<tr class="even">
-<td><code>#a-tA-S</code></td>
-<td>The number of allstars on that team at any point in their career.</td>
-</tr>
-<tr class="odd">
-<td><code>Est. Payroll</code></td>
-<td>The estimated payroll of the team.</td>
-</tr>
-<tr class="even">
-<td><code>Time</code></td>
-<td>The average game time in that season.</td>
-</tr>
-<tr class="odd">
-<td><code>Chall</code></td>
-<td>The average number of challenges per game in that season.</td>
-</tr>
-<tr class="even">
-<td><code>Succ</code></td>
-<td>The average number of successful challenges per game in that season.</td>
-</tr>
-<tr class="odd">
-<td><code>Succ%</code></td>
-<td>The percentage of successful challenges per game in that season..</td>
-</tr>
-<tr class="even">
-<td><code>Managers</code></td>
-<td>The name of the team’s manager that season.</td>
+<td><code>Year</code></td>
+<td>The year that the case is from.</td>
 </tr>
 </tbody>
 </table>
@@ -274,8 +195,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>As a tentative tv viewership dataset I found is this one from <a href="https://www.kaggle.com/datasets/mattop/world-series-baseball-television-ratings?resource=download">kaggle</a> that covers just world series game viewership between 2022 and 2024. I am trying to find a better dataset that is general tv viewership, however it seems that most if not all avialable mlb viewership data is focused solely on the world series. However, conclusions can still be drawn from this data as the world series are the most watched games in the baseball season, and if viewership is down for those its definitely down for the entire season.</p>
 <table class="table">
 <colgroup>
-<col style="width: 26%">
-<col style="width: 73%">
+<col style="width: 27%">
+<col style="width: 72%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -289,104 +210,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>The year of the world series.</td>
 </tr>
 <tr class="even">
-<td><code>network</code></td>
-<td>The network the world series was broadcast on.</td>
-</tr>
-<tr class="odd">
 <td><code>average_audience</code></td>
-<td>The average tv audience for the whole world series</td>
-</tr>
-<tr class="even">
-<td><code>game_1_audience</code></td>
-<td>The TV audience for game 1 of the world series.</td>
-</tr>
-<tr class="odd">
-<td><code>game_2_audience</code></td>
-<td>The TV audience for game 2 of the world series.</td>
-</tr>
-<tr class="even">
-<td><code>game_3_audience</code></td>
-<td>The TV audience for game 3 of the world series.</td>
-</tr>
-<tr class="odd">
-<td><code>game_4_audience</code></td>
-<td>The TV audience for game 4 of the world series.</td>
-</tr>
-<tr class="even">
-<td><code>game_5_audience</code></td>
-<td>The TV audience for game 5 of the world series.</td>
-</tr>
-<tr class="odd">
-<td><code>game_6_audience</code></td>
-<td>The TV audience for game 6 of the world series.</td>
-</tr>
-<tr class="even">
-<td><code>game_7_audience</code></td>
-<td>The TV audience for game 7 of the world series.</td>
-</tr>
-<tr class="odd">
-<td><code>total_games_played</code></td>
-<td>The number of games played in that world series</td>
-</tr>
-<tr class="even">
-<td><code>winning_team</code></td>
-<td>The winning team of that world series.</td>
-</tr>
-<tr class="odd">
-<td><code>losing_team</code></td>
-<td>The losing team of that world series.</td>
-</tr>
-<tr class="even">
-<td><code>losing_team_wins</code></td>
-<td>The number of wins for that losing team in that world series.</td>
+<td>The average tv audience for the whole world series.</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="packages" class="level1">
 <h1>Packages</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>here() starts at /Users/abigailsmith/Desktop/ds334_final_project</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ggplot2' was built under R version 4.3.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ purrr     1.0.2
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.0     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-</div>
 </section>
 <section id="data" class="level1">
 <h1>Data</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading in the pitching data set</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pitching_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/pitching_stats.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading in the pitching data set</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pitching_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/pitchingstats.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 777 Columns: 17
+<pre><code>Rows: 768 Columns: 18
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr  (1): last_name, first_name
-dbl (16): player_id, year, pa, home_run, k_percent, bb_percent, xba, xslg, s...
+dbl (17): player_id, year, pa, home_run, k_percent, bb_percent, p_hit_by_pit...
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading in each individual attendance data set</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>attendance_2018 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2018attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading in each individual attendance data set</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>attendance_2018 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2018attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 30 Columns: 16
 ── Column specification ────────────────────────────────────────────────────────
@@ -399,7 +248,7 @@ time (1): Time
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>attendance_2019 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2019attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>attendance_2019 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2019attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 30 Columns: 16
 ── Column specification ────────────────────────────────────────────────────────
@@ -412,7 +261,7 @@ time (1): Time
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>attendance_2020 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2020attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>attendance_2020 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2020attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 30 Columns: 16
 ── Column specification ────────────────────────────────────────────────────────
@@ -425,7 +274,7 @@ time (1): Time
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>attendance_2021 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2021attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>attendance_2021 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2021attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 30 Columns: 16
 ── Column specification ────────────────────────────────────────────────────────
@@ -438,7 +287,7 @@ time (1): Time
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>attendance_2022 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2022attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>attendance_2022 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2022attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 30 Columns: 16
 ── Column specification ────────────────────────────────────────────────────────
@@ -451,7 +300,7 @@ time (1): Time
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>attendance_2023 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2023attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>attendance_2023 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2023attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 30 Columns: 16
 ── Column specification ────────────────────────────────────────────────────────
@@ -464,7 +313,7 @@ time (1): Time
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>attendance_2024 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2024attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>attendance_2024 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/2024attendance.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 30 Columns: 16
 ── Column specification ────────────────────────────────────────────────────────
@@ -477,8 +326,8 @@ time (1): Time
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading in the world series data set</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>worldseriesviewing <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/world-series-ratings.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading in the world series data set</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>worldseriesviewing <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/world-series-ratings.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 54 Columns: 14
 ── Column specification ────────────────────────────────────────────────────────
@@ -491,50 +340,50 @@ dbl (11): year, average_audience, game_1_audience, game_2_audience, game_3_a...
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a year variable in each of the attendance data sets</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>attendance_2018<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2018</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>attendance_2019<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2019</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>attendance_2020<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2020</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>attendance_2021<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2021</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>attendance_2022<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2022</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>attendance_2023<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2023</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>attendance_2024<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2024</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a year variable in each of the attendance data sets</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>attendance_2018<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2018</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>attendance_2019<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2019</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>attendance_2020<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2020</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>attendance_2021<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2021</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>attendance_2022<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2022</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>attendance_2023<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2023</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>attendance_2024<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="dv">2024</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 3 joined data sets of the attendance data sets</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>attendance2018_2019 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance_2018, attendance_2019)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 3 joined data sets of the attendance data sets</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>attendance2018_2019 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance_2018, attendance_2019)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(Tm, Attendance, `Attend/G`, BatAge, PAge, BPF, PPF,
 `#HOF`, `#A-S`, `#a-tA-S`, `Est. Payroll`, Time, Chall, Succ, `Succ%`,
 Managers, year)`</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>attendance2020_2021 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance_2020, attendance_2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>attendance2020_2021 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance_2020, attendance_2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(Tm, Attendance, `Attend/G`, BatAge, PAge, BPF, PPF,
 `#HOF`, `#A-S`, `#a-tA-S`, `Est. Payroll`, Time, Chall, Succ, `Succ%`,
 Managers, year)`</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>attendance2022_2023 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance_2022, attendance_2023)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>attendance2022_2023 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance_2022, attendance_2023)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(Tm, Attendance, `Attend/G`, BatAge, PAge, BPF, PPF,
 `#HOF`, `#A-S`, `#a-tA-S`, `Est. Payroll`, Time, Chall, Succ, `Succ%`,
 Managers, year)`</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Join those 3 data sets together into 2 datasets</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>attendance2018_2021 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance2018_2019, attendance2020_2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Join those 3 data sets together into 2 datasets</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>attendance2018_2021 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance2018_2019, attendance2020_2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(Tm, Attendance, `Attend/G`, BatAge, PAge, BPF, PPF,
 `#HOF`, `#A-S`, `#a-tA-S`, `Est. Payroll`, Time, Chall, Succ, `Succ%`,
 Managers, year)`</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>attendance2022_2024 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance2022_2023, attendance_2024)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>attendance2022_2024 <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance2022_2023, attendance_2024)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(Tm, Attendance, `Attend/G`, BatAge, PAge, BPF, PPF,
 `#HOF`, `#A-S`, `#a-tA-S`, `Est. Payroll`, Time, Chall, Succ, `Succ%`,
 Managers, year)`</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Join the last two big data sets in one big complete attendance data set</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>attendancefull <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance2018_2021, attendance2022_2024)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Join the last two big data sets in one big complete attendance data set</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>attendancefull <span class="ot">&lt;-</span> <span class="fu">full_join</span>(attendance2018_2021, attendance2022_2024)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Joining with `by = join_by(Tm, Attendance, `Attend/G`, BatAge, PAge, BPF, PPF,
 `#HOF`, `#A-S`, `#a-tA-S`, `Est. Payroll`, Time, Chall, Succ, `Succ%`,
@@ -542,87 +391,175 @@ Managers, year)`</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the attendance data set as a CSV so that I do not lose track of it</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(attendancefull, <span class="st">"attendancefull.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the attendance data set as a CSV so that I do not lose track of it</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(attendancefull, <span class="st">"attendancefull.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="cleaning-and-tidying-data" class="level1">
-<h1>Cleaning and tidying data</h1>
+<section id="cleaning-and-tidying-the-pitching-data" class="level1">
+<h1>Cleaning and tidying the pitching data</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>pitching_df <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">pitcher =</span> <span class="st">`</span><span class="at">last_name, first_name</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pitching_df <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">pitcher =</span> <span class="st">`</span><span class="at">last_name, first_name</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>pitch_speeds_long <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_speed"</span>, <span class="st">"ch_avg_speed"</span>, <span class="st">"cu_avg_speed"</span>, <span class="st">"si_avg_speed"</span>), <span class="at">names_to =</span> <span class="st">"pitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"pitch_speed"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(pitch_speed, pitch_type) </span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>pitch_spin_long <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_spin"</span>, <span class="st">"ch_avg_spin"</span>, <span class="st">"cu_avg_spin"</span>, <span class="st">"si_avg_spin"</span>), <span class="at">names_to =</span> <span class="st">"pitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"spin_rate"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(spin_rate, pitch_type) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># join the two new datasets</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>full_pitch <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(pitch_speeds_long, pitch_spin_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>pitching_cleaner <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_spin"</span>, <span class="st">"ch_avg_spin"</span>, <span class="st">"cu_avg_spin"</span>, <span class="st">"si_avg_spin"</span>), <span class="at">names_to =</span> <span class="st">"pitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"spin_rate"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>pitching_cleaner <span class="ot">&lt;-</span> pitching_cleaner <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">pitch_type =</span> <span class="fu">str_remove</span>(pitch_type, <span class="st">"_avg_spin"</span>)) <span class="sc">|&gt;</span>  <span class="fu">mutate</span>(<span class="at">pitch_type =</span> <span class="fu">case_when</span>(pitch_type <span class="sc">==</span> <span class="st">"sl"</span> <span class="sc">~</span> <span class="st">"slider"</span>, pitch_type <span class="sc">==</span> <span class="st">"ch"</span> <span class="sc">~</span> <span class="st">"changeup"</span>, pitch_type <span class="sc">==</span> <span class="st">"cu"</span> <span class="sc">~</span> <span class="st">"curveball"</span>, pitch_type <span class="sc">==</span> <span class="st">"si"</span> <span class="sc">~</span> <span class="st">"sinker"</span>))  </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>pitching_cleaner <span class="ot">&lt;-</span> pitching_cleaner <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(sl_avg_speed, ch_avg_speed, si_avg_speed, cu_avg_speed, pa, player_id)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="reproducible-example-to-try-and-solve-the-code" class="level1">
-<h1>Reproducible example to try and solve the code</h1>
+<section id="cleaning-up-attendance-and-tv-viewership-dataframes" class="level1">
+<h1>Cleaning up attendance and tv viewership dataframes</h1>
+<p>I do not need all of these variables in the data frame so I am going to get rid of some of them</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>example <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">10</span><span class="sc">:</span><span class="dv">17</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>example_new <span class="ot">&lt;-</span> example <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">names_to =</span> <span class="st">"temp"</span>, <span class="at">values_to =</span> <span class="st">"speed_spin"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(temp, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"type"</span>, <span class="st">"drop"</span>, <span class="st">"spin_type"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>drop) <span class="sc">|&gt;</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(new_val, <span class="fu">c</span>(<span class="st">"type"</span>, <span class="st">"spin_type"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>attendance_smaller <span class="ot">&lt;-</span> attendancefull <span class="sc">|&gt;</span> <span class="fu">select</span>(Tm, Attendance, <span class="st">`</span><span class="at">Attend/G</span><span class="st">`</span>, year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Same deal here with the tv viewership</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>example_new <span class="sc">|&gt;</span> <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"new_val"</span>, <span class="at">values_from =</span> <span class="st">"speed_spin"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 9
-  pitcher    sl_speed sl_spin ch_speed ch_spin cu_speed cu_spin si_speed si_spin
-  &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
-1 Colon, Ba…     80.5    2388     80.8    1657       NA      NA     86.9    2136
-2 Sabathia,…     80      2250     83.4    1878       NA      NA     90.1    2027</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>example_speeds <span class="ot">&lt;-</span> example <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_speed"</span>, <span class="st">"ch_avg_speed"</span>, <span class="st">"cu_avg_speed"</span>, <span class="st">"si_avg_speed"</span>), <span class="at">names_to =</span> <span class="st">"pitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"pitch_speed"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(pitch_speed, pitch_type) </span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>example_spin <span class="ot">&lt;-</span> example <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_spin"</span>, <span class="st">"ch_avg_spin"</span>, <span class="st">"cu_avg_spin"</span>, <span class="st">"si_avg_spin"</span>), <span class="at">names_to =</span> <span class="st">"pitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"spin_rate"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(spin_rate, pitch_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(example_speeds, example_spin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 16 × 12
-   pitch_speed pitch_type   sl_avg_spin ch_avg_spin cu_avg_spin si_avg_spin
-         &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
- 1        80.5 sl_avg_speed        2388        1657          NA        2136
- 2        80.8 ch_avg_speed        2388        1657          NA        2136
- 3        NA   cu_avg_speed        2388        1657          NA        2136
- 4        86.9 si_avg_speed        2388        1657          NA        2136
- 5        80   sl_avg_speed        2250        1878          NA        2027
- 6        83.4 ch_avg_speed        2250        1878          NA        2027
- 7        NA   cu_avg_speed        2250        1878          NA        2027
- 8        90.1 si_avg_speed        2250        1878          NA        2027
- 9        NA   sl_avg_spin           NA          NA          NA          NA
-10        NA   ch_avg_spin           NA          NA          NA          NA
-11        NA   cu_avg_spin           NA          NA          NA          NA
-12        NA   si_avg_spin           NA          NA          NA          NA
-13        NA   sl_avg_spin           NA          NA          NA          NA
-14        NA   ch_avg_spin           NA          NA          NA          NA
-15        NA   cu_avg_spin           NA          NA          NA          NA
-16        NA   si_avg_spin           NA          NA          NA          NA
-# ℹ 6 more variables: pitcher &lt;chr&gt;, spin_rate &lt;dbl&gt;, sl_avg_speed &lt;dbl&gt;,
-#   ch_avg_speed &lt;dbl&gt;, cu_avg_speed &lt;dbl&gt;, si_avg_speed &lt;dbl&gt;</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>example_long <span class="ot">&lt;-</span>example <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_speed"</span>, <span class="st">"ch_avg_speed"</span>, <span class="st">"cu_avg_speed"</span>, <span class="st">"si_avg_speed"</span>), <span class="at">names_to =</span> <span class="st">"speedpitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"pitch_speed"</span>) <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_spin"</span>, <span class="st">"ch_avg_spin"</span>, <span class="st">"cu_avg_spin"</span>, <span class="st">"si_avg_spin"</span>), <span class="at">names_to =</span> <span class="st">"spinpitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"spin_rate"</span>) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(spin_rate, pitch_speed, speedpitch_type, spinpitch_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>examples_final <span class="ot">&lt;-</span> example_long <span class="sc">|&gt;</span> <span class="fu">separate</span>(speedpitch_type, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"pitchtype"</span>, <span class="st">"speed"</span>), <span class="at">sep =</span> <span class="st">"_avg_"</span>) <span class="sc">|&gt;</span> <span class="fu">separate</span>(spinpitch_type, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"pitch_type"</span>, <span class="st">"spin"</span>), <span class="at">sep =</span> <span class="st">"_avg_"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span>(<span class="fu">c</span>(pitchtype, speed, spin)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>tv_views_smaller <span class="ot">&lt;-</span> worldseriesviewing <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">c</span>(year, average_audience)) <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2018</span> <span class="sc">&amp;</span> year <span class="sc">&lt;=</span> <span class="dv">2023</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="apply-what-i-solved-from-the-example-to-the-real-dataset" class="level1">
-<h1>Apply what I solved from the example to the real dataset</h1>
+<section id="static-visualizations-for-the-shiny-app" class="level1">
+<h1>Static visualizations for the shiny app</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>pitching_cleaner <span class="ot">&lt;-</span> pitching_df <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_speed"</span>, <span class="st">"ch_avg_speed"</span>, <span class="st">"cu_avg_speed"</span>, <span class="st">"si_avg_speed"</span>), <span class="at">names_to =</span> <span class="st">"speedpitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"pitch_speed"</span>) <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">"sl_avg_spin"</span>, <span class="st">"ch_avg_spin"</span>, <span class="st">"cu_avg_spin"</span>, <span class="st">"si_avg_spin"</span>), <span class="at">names_to =</span> <span class="st">"spinpitch_type"</span>, <span class="at">values_to =</span>  <span class="st">"spin_rate"</span>) <span class="sc">|&gt;</span><span class="fu">separate</span>(speedpitch_type, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"pitchtype"</span>, <span class="st">"speed"</span>), <span class="at">sep =</span> <span class="st">"_avg_"</span>) <span class="sc">|&gt;</span> <span class="fu">separate</span>(spinpitch_type, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"pitch_type"</span>, <span class="st">"spin"</span>), <span class="at">sep =</span> <span class="st">"_avg_"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">!</span>(<span class="fu">c</span>(pitchtype, speed, spin)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>attendance_smaller_reorder <span class="ot">&lt;-</span> attendance_smaller <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">Tm =</span> <span class="fu">fct_reorder</span>(Tm, <span class="st">`</span><span class="at">Attend/G</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `Tm = fct_reorder(Tm, `Attend/G`)`.
+Caused by warning:
+! `fct_reorder()` removing 33 missing values.
+ℹ Use `.na_rm = TRUE` to silence this message.
+ℹ Use `.na_rm = FALSE` to preserve NAs.</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> attendance_smaller_reorder, <span class="fu">aes</span>(<span class="at">x =</span> Tm, <span class="at">y =</span> <span class="st">`</span><span class="at">Attend/G</span><span class="st">`</span>)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 33 rows containing missing values or values outside the scale range
+(`geom_col()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="final_project_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> attendance_smaller, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> <span class="st">`</span><span class="at">Attend/G</span><span class="st">`</span>, <span class="at">colour =</span> Tm)) <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing missing values or values outside the scale range
+(`geom_line()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="final_project_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tv_views_smaller, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> average_audience)) <span class="sc">+</span> <span class="fu">geom_col</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="final_project_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pitching_cleaner, <span class="fu">aes</span>(<span class="at">x=</span> spin_rate, <span class="at">y =</span> home_run, <span class="at">colour =</span> pitch_type)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 579 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="final_project_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pitching_cleaner, <span class="fu">aes</span>(<span class="at">x =</span> spin_rate)) <span class="sc">+</span> <span class="fu">geom_histogram</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>year) <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of spin rate facted by year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 579 rows containing non-finite outside the scale range
+(`stat_bin()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="final_project_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="shiny-app" class="level1">
+<h1>Shiny app</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>year_choices_pitching <span class="ot">&lt;-</span> pitching_cleaner <span class="sc">|&gt;</span> <span class="fu">distinct</span>(year) <span class="sc">|&gt;</span> <span class="fu">pull</span>(year)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>y_var_choices <span class="ot">&lt;-</span> <span class="fu">names</span>(pitching_cleaner)[<span class="fu">c</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>)]</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>pitch_choice <span class="ot">&lt;-</span> pitching_cleaner <span class="sc">|&gt;</span> <span class="fu">distinct</span>(pitch_type) <span class="sc">|&gt;</span> <span class="fu">pull</span>(pitch_type)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>x_var <span class="ot">&lt;-</span> <span class="fu">names</span>(attendance_smaller)[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>)]</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>year_choices_attendance <span class="ot">&lt;-</span> attendance_smaller<span class="sc">|&gt;</span> <span class="fu">distinct</span>(year) <span class="sc">|&gt;</span> <span class="fu">pull</span>(year)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sidebarLayout</span>(</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sidebarPanel</span>(</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">radioButtons</span>(<span class="st">"year_sel"</span>, <span class="at">label =</span> <span class="st">"Choose a year for pitching:"</span>, <span class="at">choices =</span> year_choices_pitching),</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">selectizeInput</span>(<span class="st">"pitch_sel"</span>, <span class="at">label =</span> <span class="st">"Choose pitch type:"</span>,</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">choices =</span> pitching_cleaner<span class="sc">$</span>pitch_type, <span class="at">selected =</span> <span class="st">"slider"</span>,</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">multiple =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">selectInput</span>(<span class="st">"y_var_sel"</span>, <span class="at">label =</span> <span class="st">"Choose a response variable for pitching:"</span>, <span class="at">choices =</span> y_var_choices),</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">radioButtons</span>(<span class="st">"x_sel"</span>, <span class="at">label =</span> <span class="st">"Choose an attendance variable:"</span>, <span class="at">choices =</span> x_var),</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">radioButtons</span>(<span class="st">"year_sel_attendance"</span>, <span class="at">label =</span> <span class="st">"Choose a year for the attendance:"</span>, <span class="at">choices =</span> year_choices_pitching),</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">selectizeInput</span>(<span class="st">"tm_sel"</span>, <span class="at">label =</span> <span class="st">"Choose a team:"</span>, <span class="at">choices =</span> attendance_smaller<span class="sc">$</span>Tm, <span class="at">selected =</span> <span class="st">"Arizona Diamondbacks"</span>, <span class="at">multiple =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mainPanel</span>(</span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tabsetPanel</span>(</span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tabPanel</span>(<span class="st">"Pitching"</span>, <span class="fu">plotOutput</span>(<span class="st">"scatterplot"</span>), <span class="fu">plotOutput</span>(<span class="st">"spinhist"</span>),  <span class="fu">dataTableOutput</span>(<span class="st">"pitching_raw_data"</span>)),</span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tabPanel</span>(<span class="st">"Attendance"</span>, <span class="fu">plotOutput</span>(<span class="st">"attendance_line"</span>), <span class="fu">plotOutput</span>(<span class="st">"barplot"</span>), <span class="fu">dataTableOutput</span>(<span class="st">"attendance_raw_data"</span>)),</span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tabPanel</span>(<span class="st">"TV Viewership"</span>, <span class="fu">plotOutput</span>(<span class="st">"audience_bar"</span>), <span class="fu">dataTableOutput</span>(<span class="st">"audience_raw_data"</span>))</span>
+<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The select input "pitch_sel" contains a large number of options;
+consider using server-side selectize for massively improved performance. See
+the Details section of the ?selectizeInput help topic.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a> pitching_reactive <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>   pitching1 <span class="ot">&lt;-</span> pitching_cleaner <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> input<span class="sc">$</span>year_sel) <span class="sc">|&gt;</span> <span class="fu">filter</span>(pitch_type <span class="sc">%in%</span> input<span class="sc">$</span>pitch_sel)</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>scatterplot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({<span class="fu">ggplot</span>(<span class="fu">pitching_reactive</span>(), <span class="fu">aes</span>(<span class="at">x=</span> spin_rate, <span class="at">y =</span> .data[[input<span class="sc">$</span>y_var_sel]], <span class="at">colour =</span> pitch_type)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"Scatterplot of spin rate against"</span>,  input<span class="sc">$</span>y_var_sel, <span class="st">" in "</span>, input<span class="sc">$</span>year_sel))})</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>spinhist <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({<span class="fu">ggplot</span>(<span class="at">data =</span> pitching_cleaner, <span class="fu">aes</span>(<span class="at">x =</span> spin_rate)) <span class="sc">+</span> <span class="fu">geom_histogram</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>year) <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of spin rate facted by year"</span>)})</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  attendance_reactive <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>    attendance1 <span class="ot">&lt;-</span> attendance_smaller <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> input<span class="sc">$</span>year_sel_attendance) <span class="sc">|&gt;</span>  <span class="fu">mutate</span>(<span class="at">Tm =</span> <span class="fu">fct_reorder</span>(Tm, .data[[input<span class="sc">$</span>x_sel]]))</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>   attendancereactive <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>   team1 <span class="ot">&lt;-</span> attendance_smaller <span class="sc">|&gt;</span> <span class="fu">filter</span>(Tm <span class="sc">%in%</span> input<span class="sc">$</span>tm_sel)})</span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>barplot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({<span class="fu">ggplot</span>(<span class="fu">attendance_reactive</span>(), <span class="fu">aes</span>(<span class="at">x =</span> Tm, <span class="at">y =</span> .data[[input<span class="sc">$</span>x_sel]])) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"Barplot of "</span>, input<span class="sc">$</span>x_sel, <span class="st">" in "</span>, input<span class="sc">$</span>year_sel_attendance)) })</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>attendance_line <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({<span class="fu">ggplot</span>(<span class="fu">attendancereactive</span>(), <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> <span class="st">`</span><span class="at">Attend/G</span><span class="st">`</span>, <span class="at">colour =</span> Tm)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average Attendance per Game Over Time "</span>) })</span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>audience_bar <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({<span class="fu">ggplot</span>(<span class="at">data =</span> tv_views_smaller, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> average_audience)) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average TV Audience per World Series Game In Each Year "</span>) })</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>attendance_raw_data <span class="ot">&lt;-</span> <span class="fu">renderDataTable</span>({attendance_smaller})</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>audience_raw_data <span class="ot">&lt;-</span> <span class="fu">renderDataTable</span>({tv_views_smaller})</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>pitching_raw_data <span class="ot">&lt;-</span> <span class="fu">renderDataTable</span>({pitching_cleaner})</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p></p><div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div><p></p>
+</div>
+</div>
+</section>
+<section id="findings" class="level1">
+<h1>Findings</h1>
+<p>When playing around with the app, I found that there is some pretty clear difference in the hitting statistics before 2021 as opposed to after. Things like strike out percentage were higher prior to 2021 as opposed to things like opposing home runs which went up after 2021. The impact of the sticky substances is most evident in the faceted histogram of spin rate, it is quite clear that the spin rate was higher previous to 2021. In the attendance graphs as well, there is a considerable increase in both the average and total attendance following 2021. This change is somewhat less evident in the TV viewership bar plot however. What is most evident in all graphs is the 2020 season, this is especially interesting in the line graph which shows a gap during the 2020 season which is because attendance was not allowed during the COVID-19 pandemic. Additionally, the 2020 season was shortened so all statistics for that season will be offset. Another season in the data set that will be strange is the 2024 season since that one had only just begun at the time of me making the app.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>If I had more time, I would have liked to add more of a modelling aspect either to the app itself or just to the project in general. It could have been interesting to assess how well spin rate predicts each of the response variables. With modelling, I could have made reactive models with liens on the scatter plot, which could have made the visualization easier to interpret. I also think looking at the correlation between spin rate and each of the response variables could have provided additional statistical information of interest.</p>
+<p>One of the main limitations I had in making my app was that I wanted to use both the spin rate and pitch speed but I had trouble pivoting the data so that it will work. After awhile of struggling to work with the data with the pitch speed, I decided against keeping it since I realized that pitch speed is actually a dependent variable when it comes to spin rate and thus was not crucial to include it in the visualization. Another issue I had was that I could not find a data set with the MLB TV viewership data for the entire season, just the World Series. While the World Series data is still interesting, I feel that it would have been better to have a bigger TV viewership data set. Additionally, I had hoped to combine the TV and attendance data sets into one so that the comparisons could be made more clear, but due to the way they were set up this did not work. That being said, I feel that i was able to accommodate to these difficulties relatively well in an organized manner.</p>
 </section>
 
 </main>
